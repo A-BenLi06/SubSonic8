@@ -6,9 +6,9 @@
     {
         #region Public Properties
 
-        int Id { get; }
+        string Id { get; }
 
-        IEnumerable<int> SongIdsToAdd { get; }
+        IEnumerable<string> SongIdsToAdd { get; }
 
         IEnumerable<int> SongIndexesToRemove { get; }
 

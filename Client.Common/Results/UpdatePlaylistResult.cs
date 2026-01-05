@@ -10,8 +10,8 @@
 
         public UpdatePlaylistResult(
             ISubsonicServiceConfiguration configuration, 
-            int id, 
-            IEnumerable<int> songIdsToAdd, 
+            string id, 
+            IEnumerable<string> songIdsToAdd, 
             IEnumerable<int> songIndexesToRemove)
             : base(configuration)
         {
@@ -24,7 +24,7 @@
 
         #region Public Properties
 
-        public int Id { get; private set; }
+        public string Id { get; private set; }
 
         public override string RequestUrl
         {
@@ -32,13 +32,13 @@
             {
                 return base.RequestUrl + "&playlistId=" + Id
                        + SongIdsToAdd.Aggregate(
-                           string.Empty, (result, entry) => result + "&songIdToAdd=" + entry.ToString())
+                           string.Empty, (result, entry) => result + "&songIdToAdd=" + entry)
                        + SongIndexesToRemove.Aggregate(
                            string.Empty, (result, entry) => result + "&songIndexToRemove=" + entry.ToString());
             }
         }
 
-        public IEnumerable<int> SongIdsToAdd { get; private set; }
+        public IEnumerable<string> SongIdsToAdd { get; private set; }
 
         public IEnumerable<int> SongIndexesToRemove { get; private set; }
 

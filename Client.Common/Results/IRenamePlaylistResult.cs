@@ -4,7 +4,7 @@
     {
         #region Public Properties
 
-        int Id { get; }
+        string Id { get; }
 
         string Name { get; }
 

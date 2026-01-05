@@ -8,7 +8,7 @@
 
         string Name { get; }
 
-        IEnumerable<int> SongIds { get; }
+        IEnumerable<string> SongIds { get; }
 
         #endregion
     }

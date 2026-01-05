@@ -9,7 +9,7 @@
     {
         #region Constructors and Destructors
 
-        public CreatePlaylistResult(ISubsonicServiceConfiguration configuration, string name, IEnumerable<int> songIds)
+        public CreatePlaylistResult(ISubsonicServiceConfiguration configuration, string name, IEnumerable<string> songIds)
             : base(configuration)
         {
             Name = name;
@@ -27,11 +27,11 @@
             get
             {
                 return base.RequestUrl + "&name=" + WebUtility.UrlEncode(Name)
-                       + SongIds.Aggregate(string.Empty, (result, entry) => result + "&songId=" + entry.ToString());
+                       + SongIds.Aggregate(string.Empty, (result, entry) => result + "&songId=" + entry);
             }
         }
 
-        public IEnumerable<int> SongIds { get; private set; }
+        public IEnumerable<string> SongIds { get; private set; }
 
         public override string ResourcePath
         {

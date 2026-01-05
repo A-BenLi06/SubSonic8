@@ -6,7 +6,7 @@
     {
         #region Public Properties
 
-        int Id { get; }
+        string Id { get; }
 
         #endregion
     }

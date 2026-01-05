@@ -6,7 +6,7 @@
 
     [TestClass]
     public abstract class DetailViewModelBaseTests<TSubsonicModel, TViewModel> :
-        CollectionViewModelBaseTests<TViewModel, int>
+        CollectionViewModelBaseTests<TViewModel, string>
         where TViewModel : IDetailViewModel<TSubsonicModel>, new() where TSubsonicModel : ISubsonicModel
     {
     }

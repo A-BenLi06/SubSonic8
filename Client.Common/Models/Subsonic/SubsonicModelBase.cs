@@ -11,7 +11,7 @@
 
         [XmlAttribute("id")]
         [DataMember]
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [XmlAttribute("name")]
         [DataMember]

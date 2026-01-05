@@ -25,7 +25,7 @@
         [TestInitialize]
         public void TestInitialize()
         {
-            _subject = new GetMusicDirectoryResult(new SubsonicServiceConfiguration { BaseUrl = "http://test" }, 42);
+            _subject = new GetMusicDirectoryResult(new SubsonicServiceConfiguration { BaseUrl = "http://test" }, "42");
         }
 
         [TestMethod]

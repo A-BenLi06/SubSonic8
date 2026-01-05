@@ -8,7 +8,7 @@
     {
         #region Constructors and Destructors
 
-        public RenamePlaylistResult(ISubsonicServiceConfiguration configuration, int id, string name)
+        public RenamePlaylistResult(ISubsonicServiceConfiguration configuration, string id, string name)
             : base(configuration)
         {
             Id = id;
@@ -19,7 +19,7 @@
 
         #region Public Properties
 
-        public int Id { get; private set; }
+        public string Id { get; private set; }
 
         public string Name { get; private set; }
 

@@ -62,7 +62,7 @@
         [TestMethod]
         public void GetIndex_Always_ReturnsAGetIndexResult()
         {
-            var result = _subject.GetIndex(5);
+            var result = _subject.GetIndex("5");
 
             result.Should().BeOfType<GetIndexResult>();
         }
@@ -78,7 +78,7 @@
         [TestMethod]
         public void GetUriForFileWithId_Should_AccessTheStreamResource()
         {
-            var uriForFileWithId = _subject.GetUriForFileWithId(1);
+            var uriForFileWithId = _subject.GetUriForFileWithId("1");
 
             uriForFileWithId.ToString().Should().Contain("stream.view");
         }
@@ -86,7 +86,7 @@
         [TestMethod]
         public void GetUriForFileWithId_Should_ReturnAUriPoitingAtTheBaseUrl()
         {
-            var uriForFileWithId = _subject.GetUriForFileWithId(1);
+            var uriForFileWithId = _subject.GetUriForFileWithId("1");
 
             uriForFileWithId.ToString().Should().StartWith(_subject.Configuration.BaseUrl);
         }
@@ -94,7 +94,7 @@
         [TestMethod]
         public void GetUriForFileWithId_Should_SetTheUsernameAndPassword()
         {
-            var uriForFileWithId = _subject.GetUriForFileWithId(1);
+            var uriForFileWithId = _subject.GetUriForFileWithId("1");
 
             uriForFileWithId.ToString().Should().Contain("u=" + _subject.Configuration.Username);
             uriForFileWithId.ToString().Should().Contain("p=" + _subject.Configuration.EncodedPassword);
@@ -103,7 +103,7 @@
         [TestMethod]
         public void GetUriForFileWithId_Should_TreyToGetTheFileWithTheGivenId()
         {
-            var uriForFileWithId = _subject.GetUriForFileWithId(3);
+            var uriForFileWithId = _subject.GetUriForFileWithId("3");
 
             uriForFileWithId.ToString().Should().Contain("id=3");
         }
@@ -139,7 +139,7 @@
         [TestMethod]
         public void GetUriForVideoWithId_Always_ReturnsAUrlContainingTheConfigurationBaseUrl()
         {
-            var uriForVideoWithId = _subject.GetUriForVideoWithId(1);
+            var uriForVideoWithId = _subject.GetUriForVideoWithId("1");
 
             uriForVideoWithId.ToString().Should().StartWith(_subject.Configuration.BaseUrl);
         }
@@ -147,7 +147,7 @@
         [TestMethod]
         public void GetUriForVideoWithId_Always_ReturnsAUrlContainingTheGivenId()
         {
-            var uriForVideoWithId = _subject.GetUriForVideoWithId(3);
+            var uriForVideoWithId = _subject.GetUriForVideoWithId("3");
 
             uriForVideoWithId.ToString().Should().Contain("id=3");
         }
@@ -155,7 +155,7 @@
         [TestMethod]
         public void GetUriForVideoWithId_Always_ReturnsAUrlPointingToTheStreamResource()
         {
-            var uriForVideoWithId = _subject.GetUriForVideoWithId(1);
+            var uriForVideoWithId = _subject.GetUriForVideoWithId("1");
 
             uriForVideoWithId.ToString().Should().Contain("stream/stream.ts");
         }
@@ -163,7 +163,7 @@
         [TestMethod]
         public void GetUriForVideoWithId_Always_SpecifiesTheVideoShouldBeHls()
         {
-            var uriForVideoWithId = _subject.GetUriForVideoWithId(3);
+            var uriForVideoWithId = _subject.GetUriForVideoWithId("3");
 
             uriForVideoWithId.ToString().Should().Contain("hls=true");
         }
@@ -171,7 +171,7 @@
         [TestMethod]
         public void GetUriForVideoWithId_MaxBitRateGiven_ShouldSetMaxBitRate()
         {
-            var uriForVideoWithId = _subject.GetUriForVideoWithId(3, 20, 200);
+            var uriForVideoWithId = _subject.GetUriForVideoWithId("3", 20, 200);
 
             uriForVideoWithId.ToString().Should().Contain("maxBitRate=200");
         }
@@ -179,7 +179,7 @@
         [TestMethod]
         public void GetUriForVideoWithId_NoTimeOffsetGiven_ShouldSetTimeOffsetTo0()
         {
-            var uriForVideoWithId = _subject.GetUriForVideoWithId(3);
+            var uriForVideoWithId = _subject.GetUriForVideoWithId("3");
 
             uriForVideoWithId.ToString().Should().Contain("timeOffset=0");
         }
@@ -187,7 +187,7 @@
         [TestMethod]
         public void GetUriForVideoWithId_TimeOffsetGiven_ShouldSetTimeOffset()
         {
-            var uriForVideoWithId = _subject.GetUriForVideoWithId(3, 20);
+            var uriForVideoWithId = _subject.GetUriForVideoWithId("3", 20);
 
             uriForVideoWithId.ToString().Should().Contain("timeOffset=20");
         }

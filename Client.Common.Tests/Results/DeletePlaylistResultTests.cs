@@ -29,13 +29,13 @@
         public void Setup()
         {
             var subsonicServiceConfiguration = new SubsonicServiceConfiguration();
-            _subject = new DeletePlaylistResultWrapper(subsonicServiceConfiguration, 1);
+            _subject = new DeletePlaylistResultWrapper(subsonicServiceConfiguration, "1");
         }
 
         [TestMethod]
         public void HandleResponse_ResponseIsEmpty_ReturnsTrue()
         {
-            var result = new DeletePlaylistResultWrapper(new SubsonicServiceConfiguration(), 1);
+            var result = new DeletePlaylistResultWrapper(new SubsonicServiceConfiguration(), "1");
 
             result.CallHandleResponse(XDocument.Load(new StringReader(Data)));
 
@@ -60,7 +60,7 @@
         {
             #region Constructors and Destructors
 
-            public DeletePlaylistResultWrapper(ISubsonicServiceConfiguration configuration, int id)
+            public DeletePlaylistResultWrapper(ISubsonicServiceConfiguration configuration, string id)
                 : base(configuration, id)
             {
             }

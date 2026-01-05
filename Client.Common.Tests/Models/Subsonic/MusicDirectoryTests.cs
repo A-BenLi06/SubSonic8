@@ -19,7 +19,7 @@
         public void GetDescription_Always_ReturnsTheCorrectValue()
         {
             _subject.Name = "test";
-            _subject.Id = 2;
+            _subject.Id = "2";
 
             var description = _subject.GetDescription();
 

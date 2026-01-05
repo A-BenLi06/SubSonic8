@@ -33,7 +33,7 @@
         [TestMethod]
         public void HandleResponse_Always_CanDeserializeAPlaylistEntryProperly()
         {
-            var result = new GetPlaylistResultWrapper(new SubsonicServiceConfiguration(), 1);
+            var result = new GetPlaylistResultWrapper(new SubsonicServiceConfiguration(), "1");
 
             result.CallHandleResponse(XDocument.Load(new StringReader(Data)));
 
@@ -47,7 +47,7 @@
         {
             #region Constructors and Destructors
 
-            public GetPlaylistResultWrapper(ISubsonicServiceConfiguration configuration, int id)
+            public GetPlaylistResultWrapper(ISubsonicServiceConfiguration configuration, string id)
                 : base(configuration, id)
             {
             }

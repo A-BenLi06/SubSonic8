@@ -25,7 +25,7 @@
         [TestInitialize]
         public void Setup()
         {
-            _subject = new GetIndexResult(new SubsonicServiceConfiguration { BaseUrl = "http://test" }, 1);
+            _subject = new GetIndexResult(new SubsonicServiceConfiguration { BaseUrl = "http://test" }, "1");
         }
 
         [TestMethod]

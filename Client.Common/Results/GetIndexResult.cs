@@ -10,7 +10,7 @@
     {
         #region Constructors and Destructors
 
-        public GetIndexResult(ISubsonicServiceConfiguration configuration, int musicFolderId)
+        public GetIndexResult(ISubsonicServiceConfiguration configuration, string musicFolderId)
             : base(configuration)
         {
             MusicFolderId = musicFolderId;
@@ -20,7 +20,7 @@
 
         #region Public Properties
 
-        public int MusicFolderId { get; private set; }
+        public string MusicFolderId { get; private set; }
 
         public override string RequestUrl
         {
@@ -44,19 +44,32 @@
 
         public override void HandleResponse(XDocument xDocument)
         {
+            var response = xDocument.Element(Namespace + "subsonic-response");
+            var indexes = response?.Element(Namespace + "indexes");
+
+            if (indexes == null)
+            {
+                // Navidrome may return empty indexes or different structure
+                Result = new IndexItem
+                {
+                    Name = string.Empty,
+                    Id = MusicFolderId,
+                    Artists = new System.Collections.Generic.List<Artist>()
+                };
+                return;
+            }
+
             var xmlSerializer = new XmlSerializer(typeof(IndexItem), new[] { typeof(Artist) });
             var indexItems =
-                xDocument.Element(Namespace + "subsonic-response")
-                         .Element(Namespace + "indexes")
-                         .Descendants(Namespace + "index")
-                         .Select(
-                             musicFolder =>
-                                 {
-                                     using (var xmlReader = musicFolder.CreateReader())
-                                     {
-                                         return (IndexItem)xmlSerializer.Deserialize(xmlReader);
-                                     }
-                                 }).ToList();
+                indexes.Descendants(Namespace + "index")
+                       .Select(
+                           musicFolder =>
+                               {
+                                   using (var xmlReader = musicFolder.CreateReader())
+                                   {
+                                       return (IndexItem)xmlSerializer.Deserialize(xmlReader);
+                                   }
+                               }).ToList();
             Result = new IndexItem
                          {
                              Name = string.Empty, 

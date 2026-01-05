@@ -9,7 +9,7 @@
     {
         #region Constructors and Destructors
 
-        public GetSongResult(ISubsonicServiceConfiguration configuration, int id)
+        public GetSongResult(ISubsonicServiceConfiguration configuration, string id)
             : base(configuration)
         {
             Id = id;
@@ -19,7 +19,7 @@
 
         #region Public Properties
 
-        public int Id { get; private set; }
+        public string Id { get; private set; }
 
         public override string RequestUrl
         {

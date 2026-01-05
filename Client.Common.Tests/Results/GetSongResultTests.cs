@@ -25,7 +25,7 @@
         [TestInitialize]
         public void TestInitialize()
         {
-            _subject = new GetSongResult(new SubsonicServiceConfiguration { BaseUrl = "http://test" }, 12);
+            _subject = new GetSongResult(new SubsonicServiceConfiguration { BaseUrl = "http://test" }, "12");
         }
 
         [TestMethod]

@@ -20,7 +20,7 @@
 
         #region Fields
 
-        private List<int> _songIdsToAdd;
+        private List<string> _songIdsToAdd;
 
         private List<int> _songIndexesToRemove;
 
@@ -34,7 +34,7 @@
         public void HandleResponse_ResponseIsEmpty_ReturnsTrue()
         {
             var result = new UpdatePlaylistResultTests.UpdatePlaylistResultWrapper(
-                new SubsonicServiceConfiguration(), 1, _songIdsToAdd, _songIndexesToRemove);
+                new SubsonicServiceConfiguration(), "1", _songIdsToAdd, _songIndexesToRemove);
 
             result.CallHandleResponse(XDocument.Load(new StringReader(Data)));
 
@@ -50,9 +50,9 @@
         [TestInitialize]
         public void Setup()
         {
-            _songIdsToAdd = new List<int>();
+            _songIdsToAdd = new List<string>();
             _songIndexesToRemove = new List<int>();
-            _subject = new RenamePlaylistResultWrapper(new SubsonicServiceConfiguration(), 1, "test a");
+            _subject = new RenamePlaylistResultWrapper(new SubsonicServiceConfiguration(), "1", "test a");
         }
 
         [TestMethod]
@@ -67,7 +67,7 @@
         {
             #region Constructors and Destructors
 
-            public RenamePlaylistResultWrapper(ISubsonicServiceConfiguration configuration, int id, string name)
+            public RenamePlaylistResultWrapper(ISubsonicServiceConfiguration configuration, string id, string name)
                 : base(configuration, id, name)
             {
             }

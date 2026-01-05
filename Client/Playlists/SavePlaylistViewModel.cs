@@ -141,12 +141,12 @@
             CanEdit = true;
         }
 
-        private static int ExtractId(PlaylistItem item)
+        private static string ExtractId(PlaylistItem item)
         {
-            return int.Parse(item.Uri.ExtractParamterFromQuery("id"));
+            return item.Uri.ExtractParamterFromQuery("id");
         }
 
-        private IEnumerable<int> GetSongIdsForActivePlaylist()
+        private IEnumerable<string> GetSongIdsForActivePlaylist()
         {
             return PlaylistManagementService.Items.Select(ExtractId);
         }

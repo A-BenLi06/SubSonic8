@@ -28,7 +28,7 @@
 
             _subject.Result.Should().NotBeNull();
             _subject.Result.Count.Should().Be(2);
-            _subject.Result[0].Id.Should().Be(111);
+            _subject.Result[0].Id.Should().Be("111");
         }
 
         internal class ResultWrapper : GetRandomSongsResult

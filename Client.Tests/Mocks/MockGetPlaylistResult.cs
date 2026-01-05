@@ -8,7 +8,7 @@
     {
         #region Public Properties
 
-        public int Id { get; private set; }
+        public string Id { get; private set; }
 
         #endregion
     }

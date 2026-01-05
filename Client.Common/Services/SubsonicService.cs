@@ -61,25 +61,25 @@
             }
         }
 
-        public Func<string, IEnumerable<int>, ICreatePlaylistResult> CreatePlaylist { get; set; }
+        public Func<string, IEnumerable<string>, ICreatePlaylistResult> CreatePlaylist { get; set; }
 
-        public Func<int, IDeletePlaylistResult> DeletePlaylist { get; set; }
+        public Func<string, IDeletePlaylistResult> DeletePlaylist { get; set; }
 
-        public Func<int, IGetAlbumResult> GetAlbum { get; set; }
+        public Func<string, IGetAlbumResult> GetAlbum { get; set; }
 
         public Func<IGetAllPlaylistsResult> GetAllPlaylists { get; set; }
 
-        public Func<int, IGetArtistResult> GetArtist { get; set; }
+        public Func<string, IGetArtistResult> GetArtist { get; set; }
 
-        public Func<int, IGetIndexResult> GetIndex { get; set; }
+        public Func<string, IGetIndexResult> GetIndex { get; set; }
 
-        public Func<int, IGetMusicDirectoryResult> GetMusicDirectory { get; set; }
+        public Func<string, IGetMusicDirectoryResult> GetMusicDirectory { get; set; }
 
         public Func<IGetRootResult> GetMusicFolders { get; set; }
 
-        public Func<int, IGetPlaylistResult> GetPlaylist { get; set; }
+        public Func<string, IGetPlaylistResult> GetPlaylist { get; set; }
 
-        public Func<int, IGetSongResult> GetSong { get; set; }
+        public Func<string, IGetSongResult> GetSong { get; set; }
 
         public virtual bool HasValidSubsonicUrl
         {
@@ -91,11 +91,11 @@
 
         public Func<IPingResult> Ping { get; set; }
 
-        public Func<int, string, IRenamePlaylistResult> RenamePlaylist { get; set; }
+        public Func<string, string, IRenamePlaylistResult> RenamePlaylist { get; set; }
 
         public Func<string, ISearchResult> Search { get; set; }
 
-        public Func<int, IEnumerable<int>, IEnumerable<int>, IUpdatePlaylistResult> UpdatePlaylist { get; set; }
+        public Func<string, IEnumerable<string>, IEnumerable<int>, IUpdatePlaylistResult> UpdatePlaylist { get; set; }
 
         public Func<int, IGetRandomSongsResult> GetRandomSongs { get; set; }
 
@@ -130,7 +130,7 @@
             return result;
         }
 
-        public virtual Uri GetUriForFileWithId(int id)
+        public virtual Uri GetUriForFileWithId(string id)
         {
             return
                 new Uri(
@@ -151,7 +151,7 @@
             return new Uri(regex.Replace(uriString, regeExFormat));
         }
 
-        public virtual Uri GetUriForVideoWithId(int id, int timeOffset = 0, int maxBitRate = 0)
+        public virtual Uri GetUriForVideoWithId(string id, int timeOffset = 0, int maxBitRate = 0)
         {
             var uriString = string.Format(
                 "{0}stream/stream.ts?id={1}&hls=true&timeOffset={2}", _configuration.BaseUrl, id, timeOffset);
@@ -167,17 +167,17 @@
 
         #region Methods
 
-        private ICreatePlaylistResult CreatePlaylistImpl(string name, IEnumerable<int> songIds)
+        private ICreatePlaylistResult CreatePlaylistImpl(string name, IEnumerable<string> songIds)
         {
             return new CreatePlaylistResult(Configuration, name, songIds);
         }
 
-        private IDeletePlaylistResult DeletePlaylistImpl(int id)
+        private IDeletePlaylistResult DeletePlaylistImpl(string id)
         {
             return new DeletePlaylistResult(Configuration, id);
         }
 
-        private IGetAlbumResult GetAlbumImpl(int id)
+        private IGetAlbumResult GetAlbumImpl(string id)
         {
             return new GetAlbumResult(_configuration, id);
         }
@@ -187,17 +187,17 @@
             return new GetAllPlaylistsResult(_configuration);
         }
 
-        private IGetArtistResult GetArtistImpl(int id)
+        private IGetArtistResult GetArtistImpl(string id)
         {
             return new GetArtistsResult(_configuration, id);
         }
 
-        private IGetIndexResult GetIndexImpl(int musicFolderId)
+        private IGetIndexResult GetIndexImpl(string musicFolderId)
         {
             return new GetIndexResult(_configuration, musicFolderId);
         }
 
-        private IGetMusicDirectoryResult GetMusicDirectoryImpl(int id)
+        private IGetMusicDirectoryResult GetMusicDirectoryImpl(string id)
         {
             return new GetMusicDirectoryResult(_configuration, id);
         }
@@ -207,12 +207,12 @@
             return new GetRootResult(_configuration);
         }
 
-        private IGetPlaylistResult GetPlaylistImpl(int id)
+        private IGetPlaylistResult GetPlaylistImpl(string id)
         {
             return new GetPlaylistResult(_configuration, id);
         }
 
-        private IGetSongResult GetSongImpl(int id)
+        private IGetSongResult GetSongImpl(string id)
         {
             return new GetSongResult(_configuration, id);
         }
@@ -222,7 +222,7 @@
             return new PingResult(Configuration);
         }
 
-        private IRenamePlaylistResult RenamePlaylistImpl(int id, string name)
+        private IRenamePlaylistResult RenamePlaylistImpl(string id, string name)
         {
             return new RenamePlaylistResult(Configuration, id, name);
         }
@@ -233,7 +233,7 @@
         }
 
         private IUpdatePlaylistResult UpdatePlaylistResultImpl(
-            int id, IEnumerable<int> songIdsToAdd, IEnumerable<int> songIndexesToRemove)
+            string id, IEnumerable<string> songIdsToAdd, IEnumerable<int> songIndexesToRemove)
         {
             return new UpdatePlaylistResult(Configuration, id, songIdsToAdd, songIndexesToRemove);
         }

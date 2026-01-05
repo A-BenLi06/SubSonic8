@@ -21,7 +21,7 @@
 
         #region Fields
 
-        private List<int> _songIdsToAdd;
+        private List<string> _songIdsToAdd;
 
         private List<int> _songIndexesToRemove;
 
@@ -35,7 +35,7 @@
         public void HandleResponse_ResponseIsEmpty_ReturnsTrue()
         {
             var result = new UpdatePlaylistResultWrapper(
-                new SubsonicServiceConfiguration(), 1, _songIdsToAdd, _songIndexesToRemove);
+                new SubsonicServiceConfiguration(), "1", _songIdsToAdd, _songIndexesToRemove);
 
             result.CallHandleResponse(XDocument.Load(new StringReader(Data)));
 
@@ -45,7 +45,7 @@
         [TestMethod]
         public void RequestUrlShouldBeCorrect()
         {
-            _songIdsToAdd.AddRange(Enumerable.Range(0, 2));
+            _songIdsToAdd.AddRange(new[] { "0", "1" });
             _songIndexesToRemove.AddRange(Enumerable.Range(2, 2));
 
             _subject.RequestUrl.Should()
@@ -55,10 +55,10 @@
         [TestInitialize]
         public void Setup()
         {
-            _songIdsToAdd = new List<int>();
+            _songIdsToAdd = new List<string>();
             _songIndexesToRemove = new List<int>();
             _subject = new UpdatePlaylistResultWrapper(
-                new SubsonicServiceConfiguration(), 1, _songIdsToAdd, _songIndexesToRemove);
+                new SubsonicServiceConfiguration(), "1", _songIdsToAdd, _songIndexesToRemove);
         }
 
         [TestMethod]
@@ -75,8 +75,8 @@
 
             public UpdatePlaylistResultWrapper(
                 ISubsonicServiceConfiguration configuration, 
-                int id, 
-                IEnumerable<int> songIdsToAdd, 
+                string id, 
+                IEnumerable<string> songIdsToAdd, 
                 IEnumerable<int> songIndexesToRemove)
                 : base(configuration, id, songIdsToAdd, songIndexesToRemove)
             {

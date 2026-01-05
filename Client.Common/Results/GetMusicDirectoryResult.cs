@@ -9,13 +9,13 @@ namespace Client.Common.Results
     {
         #region Fields
 
-        private readonly int _id;
+        private readonly string _id;
 
         #endregion
 
         #region Constructors and Destructors
 
-        public GetMusicDirectoryResult(SubsonicServiceConfiguration configuration, int id)
+        public GetMusicDirectoryResult(SubsonicServiceConfiguration configuration, string id)
             : base(configuration)
         {
             _id = id;
@@ -25,7 +25,7 @@ namespace Client.Common.Results
 
         #region Public Properties
 
-        public int Id
+        public string Id
         {
             get
             {

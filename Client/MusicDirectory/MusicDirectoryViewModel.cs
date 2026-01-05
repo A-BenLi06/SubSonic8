@@ -24,7 +24,7 @@
             return result.Children;
         }
 
-        protected override IServiceResultBase<MusicDirectory> GetResult(int id)
+        protected override IServiceResultBase<MusicDirectory> GetResult(string id)
         {
             return SubsonicService.GetMusicDirectory(id);
         }

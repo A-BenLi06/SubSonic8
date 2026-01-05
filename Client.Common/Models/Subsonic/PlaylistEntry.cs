@@ -12,13 +12,13 @@
         public string Album { get; set; }
 
         [XmlAttribute("albumId")]
-        public int AlbumId { get; set; }
+        public string AlbumId { get; set; }
 
         [XmlAttribute("artist")]
         public string Artist { get; set; }
 
         [XmlAttribute("artistId")]
-        public int ArtistId { get; set; }
+        public string ArtistId { get; set; }
 
         [XmlAttribute("bitRate")]
         public int BitRate { get; set; }
@@ -47,7 +47,7 @@
         }
 
         [XmlAttribute("parent")]
-        public int ParentId { get; set; }
+        public string ParentId { get; set; }
 
         [XmlAttribute("title")]
         public string Title { get; set; }

@@ -10,7 +10,7 @@
 
         public string Name { get; private set; }
 
-        public IEnumerable<int> SongIds { get; private set; }
+        public IEnumerable<string> SongIds { get; private set; }
 
         #endregion
     }

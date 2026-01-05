@@ -9,7 +9,7 @@
         #region Public Properties
 
         [XmlAttribute("artistId")]
-        public int ArtistId { get; set; }
+        public string ArtistId { get; set; }
 
         [XmlAttribute("songCount")]
         public int SongCount { get; set; }

@@ -2,7 +2,7 @@ namespace Subsonic8.Framework.ViewModel
 {
     using Client.Common.Models;
 
-    public interface IDetailViewModel<T> : ICollectionViewModel<int>
+    public interface IDetailViewModel<T> : ICollectionViewModel<string>
         where T : ISubsonicModel
     {
         #region Public Properties

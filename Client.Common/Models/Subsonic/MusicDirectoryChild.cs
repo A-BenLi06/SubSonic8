@@ -38,7 +38,7 @@
         }
 
         [XmlAttribute("parent")]
-        public int Parent { get; set; }
+        public string Parent { get; set; }
 
         [XmlAttribute("title")]
         public string Title { get; set; }

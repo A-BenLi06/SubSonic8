@@ -23,7 +23,7 @@
 
         #region Methods
 
-        protected override async Task AfterPopulate(int id)
+        protected override async Task AfterPopulate(string id)
         {
             var result = SubsonicService.GetMusicFolders();
             await result.WithErrorHandler(ErrorDialogViewModel).OnSuccess(r => SetIndexName(r, id)).Execute();
@@ -34,15 +34,26 @@
             return result.Artists;
         }
 
-        protected override IServiceResultBase<IndexItem> GetResult(int id)
+        protected override IServiceResultBase<IndexItem> GetResult(string id)
         {
             return SubsonicService.GetIndex(id);
         }
 
-        private void SetIndexName(IEnumerable<MusicFolder> musicFolders, int id)
+        private void SetIndexName(IEnumerable<MusicFolder> musicFolders, string id)
         {
-            var rootFolder = musicFolders.First(f => f.Id == id);
-            Item.Name = rootFolder != null ? rootFolder.Name : "Unknown";
+            if (Item == null)
+            {
+                return;
+            }
+
+            if (musicFolders == null || !musicFolders.Any())
+            {
+                Item.Name = "Music";
+                return;
+            }
+
+            var rootFolder = musicFolders.FirstOrDefault(f => f != null && f.Id == id);
+            Item.Name = rootFolder?.Name ?? "Music";
         }
 
         #endregion

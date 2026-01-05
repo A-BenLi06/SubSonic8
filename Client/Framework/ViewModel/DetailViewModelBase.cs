@@ -2,7 +2,7 @@
 {
     using Client.Common.Models;
 
-    public abstract class DetailViewModelBase<T> : CollectionViewModelBase<int, T>, IDetailViewModel<T>
+    public abstract class DetailViewModelBase<T> : CollectionViewModelBase<string, T>, IDetailViewModel<T>
         where T : class, ISubsonicModel
     {
         #region Fields

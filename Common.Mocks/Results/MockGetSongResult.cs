@@ -8,9 +8,9 @@
     {
         #region Constructors and Destructors
 
-        public MockGetSongResult(int id = 0)
+        public MockGetSongResult(string id = null)
         {
-            GetResultFunc = () => new Song { Id = id };
+            GetResultFunc = () => new Song { Id = id ?? string.Empty };
         }
 
         #endregion

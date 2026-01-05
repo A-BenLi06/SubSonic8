@@ -22,7 +22,7 @@
         public string Artist { get; set; }
 
         [XmlAttribute("artistId")]
-        public int ArtistId { get; set; }
+        public string ArtistId { get; set; }
 
         [XmlAttribute("songCount")]
         public int SongCount { get; set; }

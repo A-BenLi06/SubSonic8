@@ -13,35 +13,35 @@ namespace Client.Common.Services
 
         SubsonicServiceConfiguration Configuration { get; set; }
 
-        Func<string, IEnumerable<int>, ICreatePlaylistResult> CreatePlaylist { get; set; }
+        Func<string, IEnumerable<string>, ICreatePlaylistResult> CreatePlaylist { get; set; }
 
-        Func<int, IDeletePlaylistResult> DeletePlaylist { get; set; }
+        Func<string, IDeletePlaylistResult> DeletePlaylist { get; set; }
 
-        Func<int, IGetAlbumResult> GetAlbum { get; set; }
+        Func<string, IGetAlbumResult> GetAlbum { get; set; }
 
         Func<IGetAllPlaylistsResult> GetAllPlaylists { get; set; }
 
-        Func<int, IGetArtistResult> GetArtist { get; set; }
+        Func<string, IGetArtistResult> GetArtist { get; set; }
 
-        Func<int, IGetIndexResult> GetIndex { get; set; }
+        Func<string, IGetIndexResult> GetIndex { get; set; }
 
-        Func<int, IGetMusicDirectoryResult> GetMusicDirectory { get; set; }
+        Func<string, IGetMusicDirectoryResult> GetMusicDirectory { get; set; }
 
         Func<IGetRootResult> GetMusicFolders { get; set; }
 
-        Func<int, IGetPlaylistResult> GetPlaylist { get; set; }
+        Func<string, IGetPlaylistResult> GetPlaylist { get; set; }
 
-        Func<int, IGetSongResult> GetSong { get; set; }
+        Func<string, IGetSongResult> GetSong { get; set; }
 
         bool HasValidSubsonicUrl { get; }
 
         Func<IPingResult> Ping { get; set; }
 
-        Func<int, string, IRenamePlaylistResult> RenamePlaylist { get; set; }
+        Func<string, string, IRenamePlaylistResult> RenamePlaylist { get; set; }
 
         Func<string, ISearchResult> Search { get; set; }
 
-        Func<int, IEnumerable<int>, IEnumerable<int>, IUpdatePlaylistResult> UpdatePlaylist { get; set; }
+        Func<string, IEnumerable<string>, IEnumerable<int>, IUpdatePlaylistResult> UpdatePlaylist { get; set; }
 
         Func<int, IGetRandomSongsResult> GetRandomSongs { get; set; }
 
@@ -53,11 +53,11 @@ namespace Client.Common.Services
 
         string GetCoverArtForId(string coverArt, ImageType imageType);
 
-        Uri GetUriForFileWithId(int id);
+        Uri GetUriForFileWithId(string id);
 
         Uri GetUriForVideoStartingAt(Uri source, double totalSeconds);
 
-        Uri GetUriForVideoWithId(int id, int timeOffset = 0, int maxBitRate = 0);
+        Uri GetUriForVideoWithId(string id, int timeOffset = 0, int maxBitRate = 0);
 
         #endregion
     }

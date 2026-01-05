@@ -15,7 +15,7 @@
             return result.Songs;
         }
 
-        protected override IServiceResultBase<Album> GetResult(int id)
+        protected override IServiceResultBase<Album> GetResult(string id)
         {
             return SubsonicService.GetAlbum(id);
         }
