@@ -214,6 +214,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DataStructures\SubsonicService\SubsonicServiceConfigurationExtensions.cs" />
     <Compile Include="Services\WinRTWrappersService.cs" />
+    <Compile Include="Services\ICoverArtCacheService.cs" />
+    <Compile Include="Services\CoverArtCacheService.cs" />
+    <Compile Include="Services\RequestThrottler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Caliburn.Micro, Version=1.5.2.0, Culture=neutral, processorArchitecture=MSIL">

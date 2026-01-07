@@ -22,7 +22,7 @@
 
         <TextBlock Style="{StaticResource SnappedAppNameStyle}">Subsonic8</TextBlock>
 
-        <Image Grid.Row="1" Source="{Binding CoverArt}" Stretch="Uniform"/>
+        <Image Grid.Row="1" Source="{Binding CoverArt, Converter={StaticResource CoverArtConverter}}" Stretch="Uniform"/>
 
         <StackPanel Grid.Row="2" Style="{StaticResource SnappedArtistDetailsPanelStyle}">
             <TextBlock Text="{Binding Path=ActiveItem.Artist}" Style="{StaticResource SnappedTitleStyle}" Visibility="{Binding Path=ActiveItem, Converter={StaticResource NullToVisibilityConverter}}"/>

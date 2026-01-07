@@ -31,7 +31,15 @@
             </ToggleSwitch.HeaderTemplate>
         </ToggleSwitch>
 
+        <TextBlock Text="Cache" Style="{StaticResource SettingsTextStyle}" Margin="0,20,0,0" />
+        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+            <TextBlock Text="Cache Size: " Style="{StaticResource BodyTextBlockStyle}" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding CacheSize}" FontWeight="Bold" Style="{StaticResource BodyTextBlockStyle}" VerticalAlignment="Center" />
+        </StackPanel>
+        <Button x:Name="CleanCache" Style="{StaticResource LightButton}" Content="Clean Cache" 
+                Margin="0,10,0,0" HorizontalAlignment="Left" />
+
         <Button x:Name="ApplyChanges" Style="{StaticResource LightButton}" Width="100" Content="Save"
-                HorizontalAlignment="Right" />
+                HorizontalAlignment="Right" Margin="0,20,0,0" />
     </StackPanel>
 </UserControl>

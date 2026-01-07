@@ -36,6 +36,7 @@
             Singletons.Add<INotificationsHelper, NotificationsHelper>();
             Singletons.Add<IConfigurationProvider, LastFmConfigurationProvider>();
             Singletons.Add<SubEchoNest.IConfigurationProvider, EchoNestConfigurationProvider>();
+            // ICoverArtCacheService 由 SubsonicCommonModule 的 ServiceConvention 自动注册
         }
 
         #endregion

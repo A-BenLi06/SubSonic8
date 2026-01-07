@@ -44,9 +44,20 @@
             Kernel.Load<ClientModule>();
         }
 
-        protected override void OnLaunched(LaunchActivatedEventArgs args)
+        protected override async void OnLaunched(LaunchActivatedEventArgs args)
         {
             StartApplication();
+            
+            // 启动后清理过期缓存（7天前）- 延迟执行避免阻塞启动
+            try
+            {
+                var cacheService = Kernel.Get<ICoverArtCacheService>();
+                await cacheService.CleanExpiredCacheAsync(7);
+            }
+            catch
+            {
+                // 缓存清理失败不影响应用启动
+            }
         }
 
         protected override void OnSearchActivated(SearchActivatedEventArgs args)
