@@ -23,6 +23,7 @@
     <NuGetPackageImportStamp>08752d16</NuGetPackageImportStamp>
     <ApplicationInsightsResourceId>/subscriptions/ce8b206c-424f-40fd-b5c3-58a0b235169c/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/Client</ApplicationInsightsResourceId>
     <AppxBundlePlatforms>neutral</AppxBundlePlatforms>
+    <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
