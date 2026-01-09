@@ -530,45 +530,23 @@
             var dispatcher = Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher;
             await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
                     {
-                        try
+                        var writeableBitmap = new WriteableBitmap(1, 1);
+                        var streamTask = coverArt == CoverArtPlaceholderLarge
+                                             ? GetStreamFromFile(coverArt)
+                                             : GetStreamFromUri(coverArt);
+                        using (var stream = await streamTask)
                         {
-                            var writeableBitmap = new WriteableBitmap(1, 1);
-                            var streamTask = coverArt == CoverArtPlaceholderLarge
-                                                 ? GetStreamFromFile(coverArt)
-                                                 : GetStreamFromUri(coverArt);
-                            using (var stream = await streamTask)
-                            {
-                                writeableBitmap = await writeableBitmap.FromStream(stream);
-                                var bluredImage = writeableBitmap.Convolute(Gaussian11X11Kernel);
-                                BluredCoverArt = bluredImage;
-                            }
-                        }
-                        catch
-                        {
-                            // 图片下载失败时使用占位符
-                            try
-                            {
-                                var writeableBitmap = new WriteableBitmap(1, 1);
-                                using (var stream = await GetStreamFromFile(CoverArtPlaceholderLarge))
-                                {
-                                    writeableBitmap = await writeableBitmap.FromStream(stream);
-                                    var bluredImage = writeableBitmap.Convolute(Gaussian11X11Kernel);
-                                    BluredCoverArt = bluredImage;
-                                }
-                            }
-                            catch { }
+                            writeableBitmap = await writeableBitmap.FromStream(stream);
+                            var bluredImage = writeableBitmap.Convolute(Gaussian11X11Kernel);
+                            BluredCoverArt = bluredImage;
                         }
                     });
         }
 
         private static async Task<IRandomAccessStream> GetStreamFromUri(string coverArt)
         {
-            // 通过限流阀控制请求
-            return await Client.Common.Services.RequestThrottler.ExecuteAsync(async () =>
-            {
-                var streamReference = RandomAccessStreamReference.CreateFromUri(new Uri(coverArt, UriKind.Absolute));
-                return await streamReference.OpenReadAsync();
-            });
+            var streamReference = RandomAccessStreamReference.CreateFromUri(new Uri(coverArt, UriKind.Absolute));
+            return await streamReference.OpenReadAsync();
         }
 
         private static async Task<IRandomAccessStream> GetStreamFromFile(string file)

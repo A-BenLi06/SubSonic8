@@ -140,62 +140,37 @@
 
         private async Task<HttpStreamResult> GetResource()
         {
-            const int maxRetries = 3;
-            int delay = 1000; // 起始延迟 1 秒
-
-            for (int attempt = 0; attempt <= maxRetries; attempt++)
+            var result = new HttpStreamResult();
+            try
             {
-                var result = new HttpStreamResult();
-                try
+                var httpRequestMessage = CreateRequest();
+                var response = await Client.SendAsync(httpRequestMessage);
+                if (response.IsSuccessStatusCode)
                 {
-                    var httpRequestMessage = CreateRequest();
-                    var response = await Client.SendAsync(httpRequestMessage);
-                    
-                    // 处理可重试的错误状态码: 429, 502, 503
-                    var statusCode = (int)response.StatusCode;
-                    if (statusCode == 429 || statusCode == 502 || statusCode == 503)
-                    {
-                        if (attempt < maxRetries)
-                        {
-                            await Task.Delay(delay);
-                            delay *= 2; // 指数退避
-                            continue;
-                        }
-                        throw new CommunicationException(
-                            string.Format("Server returned {0} after multiple retries.", response.StatusCode));
-                    }
-                    
-                    if (response.IsSuccessStatusCode)
-                    {
-                        result.Stream = await response.Content.ReadAsStreamAsync();
-                    }
-                    else
-                    {
-                        throw new CommunicationException(
-                            string.Format(
-                                "Response was:\r\nStatus Code: {0}\r\nReason: {1}", response.StatusCode, response.ReasonPhrase));
-                    }
-                    
-                    return result;
+                    result.Stream = await response.Content.ReadAsStreamAsync();
                 }
-                catch (HttpRequestException exception)
+                else
                 {
-                    var innerMessage = exception.InnerException != null
-                                           ? exception.Message + "\r\n" + exception.InnerException.Message
-                                           : exception.Message;
-                    result.Exception =
-                        new CommunicationException(
-                            string.Format("Could not perform Http request.\r\nMessage:\r\n{0}", innerMessage), exception);
-                    return result;
-                }
-                catch (Exception exception)
-                {
-                    result.Exception = exception;
-                    return result;
+                    throw new CommunicationException(
+                        string.Format(
+                            "Response was:\r\nStatus Code: {0}\r\nReason: {1}", response.StatusCode, response.ReasonPhrase));
                 }
             }
+            catch (HttpRequestException exception)
+            {
+                var innerMessage = exception.InnerException != null
+                                       ? exception.Message + "\r\n" + exception.InnerException.Message
+                                       : exception.Message;
+                result.Exception =
+                    new CommunicationException(
+                        string.Format("Could not perform Http request.\r\nMessage:\r\n{0}", innerMessage), exception);
+            }
+            catch (Exception exception)
+            {
+                result.Exception = exception;
+            }
 
-            return new HttpStreamResult { Exception = new CommunicationException("Max retries exceeded.") };
+            return result;
         }
 
         #endregion

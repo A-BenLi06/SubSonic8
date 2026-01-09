@@ -194,7 +194,6 @@
     <Compile Include="Converters\PlaybackStateToVisibilityConverter.cs" />
     <Compile Include="Converters\PlayingStateToVisibilityConverter.cs" />
     <Compile Include="Converters\StringToVisibilityConverter.cs" />
-    <Compile Include="Framework\Converters\CoverArtConverter.cs" />
     <Compile Include="EchoNestCredentials.cs" />
     <Compile Include="ErrorDialog\ErrorDialogViewModelStrings.cs">
       <AutoGen>True</AutoGen>

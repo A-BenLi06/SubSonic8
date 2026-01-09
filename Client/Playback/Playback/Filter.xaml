@@ -14,7 +14,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Image Source="{Binding CoverArt, Converter={StaticResource CoverArtConverter}}" Style="{StaticResource PlaybackBigCoverArtStyle}"/>
+        <Image Source="{Binding CoverArt}" Style="{StaticResource PlaybackBigCoverArtStyle}"/>
         <StackPanel Grid.Row="1" Style="{StaticResource FilterPanelStyle}">
             <TextBlock Text="Type the name of a song or artist bellow: " Style="{StaticResource FilterInstructionsStyle}"/>
             <StackPanel Style="{StaticResource FilterInputPanelStyle}">

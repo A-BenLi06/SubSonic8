@@ -73,25 +73,6 @@ namespace Subsonic8.Settings
         [Inject]
         public ISettingsHelper SettingsHelper { get; set; }
 
-        [Inject]
-        public ICoverArtCacheService CoverArtCacheService { get; set; }
-
-        private string _cacheSize = "Calculating...";
-
-        public string CacheSize
-        {
-            get { return _cacheSize; }
-            private set
-            {
-                _cacheSize = value;
-                NotifyOfPropertyChange();
-            }
-        }
-
-        private bool _isCleaningCache;
-
-        public bool CanCleanCache => !_isCleaningCache;
-
         #endregion
 
         #region Public Methods and Operators
@@ -131,24 +112,6 @@ namespace Subsonic8.Settings
             NotifyOfPropertyChange(() => CanApplyChanges);
         }
 
-        public async Task CleanCache()
-        {
-            _isCleaningCache = true;
-            NotifyOfPropertyChange(() => CanCleanCache);
-            
-            await CoverArtCacheService.ClearAllCacheAsync();
-            await UpdateCacheSize();
-            
-            _isCleaningCache = false;
-            NotifyOfPropertyChange(() => CanCleanCache);
-        }
-
-        private async Task UpdateCacheSize()
-        {
-            var size = await CoverArtCacheService.GetCacheSizeAsync();
-            CacheSize = Client.Common.Services.CoverArtCacheService.FormatFileSize(size);
-        }
-
         #endregion
 
         #region Methods
@@ -158,7 +121,6 @@ namespace Subsonic8.Settings
             base.OnActivate();
 
             await Populate();
-            await UpdateCacheSize();
         }
 
         private void PopulateCredentials(Subsonic8Configuration configuration)

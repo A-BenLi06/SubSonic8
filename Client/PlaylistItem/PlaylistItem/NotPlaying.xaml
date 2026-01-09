@@ -19,7 +19,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Image Source="{Binding CoverArtUrl, Converter={StaticResource CoverArtConverter}}" Style="{StaticResource PlaylistItemCoverArtStyle}" />
+        <Image Source="{Binding CoverArtUrl}" Style="{StaticResource PlaylistItemCoverArtStyle}" />
 
         <Grid Grid.Column="1" Style="{StaticResource PlaylistItemDetailsGridStyle}">
             <Grid.ColumnDefinitions>
