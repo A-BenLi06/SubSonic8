@@ -44,6 +44,14 @@
 
         public Type SourcePageType { get; set; }
 
+        public bool SuspendState() { return true; }
+
+        public bool ResumeState() { return true; }
+
+        public IList<PageStackEntry> BackStack { get { return new List<PageStackEntry>(); } }
+
+        public IList<PageStackEntry> ForwardStack { get { return new List<PageStackEntry>(); } }
+
         #endregion
 
         #region Public Methods and Operators

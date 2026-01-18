@@ -1,0 +1,96 @@
+<Page
+    x:Class="Subsonic8.Phone.Views.AlbumPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Icon="Play" Label="Play All" Click="OnPlayAllClick" />
+            <AppBarButton Icon="Shuffle" Label="Shuffle" Click="OnShuffleClick" />
+        </CommandBar>
+    </Page.BottomAppBar>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="24,17,24,12">
+            <TextBlock x:Name="AlbumNameText" 
+                       Text="Album" 
+                       Style="{StaticResource SubHeaderTextStyle}"
+                       TextTrimming="CharacterEllipsis"
+                       MaxLines="2" />
+            <TextBlock x:Name="ArtistNameText" 
+                       Text="Artist" 
+                       Style="{StaticResource BodyTextStyle}"
+                       Margin="0,4,0,0" />
+            <TextBlock x:Name="SongCountText" 
+                       Text="0 songs" 
+                       Style="{StaticResource BodyTextStyle}" />
+        </StackPanel>
+
+        <!-- Content -->
+        <Grid Grid.Row="1">
+            <!-- Loading Indicator -->
+            <ProgressRing x:Name="LoadingIndicator" 
+                          IsActive="False" 
+                          Width="60" Height="60" 
+                          HorizontalAlignment="Center" 
+                          VerticalAlignment="Center" />
+
+            <!-- Song List -->
+            <ListView x:Name="SongListView"
+                      ItemsSource="{Binding Songs}"
+                      SelectionMode="None"
+                      IsItemClickEnabled="True"
+                      ItemClick="OnSongClick"
+                      ItemContainerStyle="{StaticResource AlbumListItemStyle}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="12,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Track Number -->
+                            <TextBlock Grid.Column="0" 
+                                       Text="{Binding Track}"
+                                       Style="{StaticResource BodyTextStyle}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center" />
+
+                            <!-- Song Info -->
+                            <StackPanel Grid.Column="1" 
+                                        VerticalAlignment="Center">
+                                <TextBlock Text="{Binding Title}" 
+                                           Style="{StaticResource TitleTextStyle}"
+                                           TextTrimming="CharacterEllipsis"
+                                           MaxLines="1" />
+                                <TextBlock Text="{Binding Artist}" 
+                                           Style="{StaticResource BodyTextStyle}"
+                                           TextTrimming="CharacterEllipsis"
+                                           MaxLines="1" />
+                            </StackPanel>
+
+                            <!-- Duration -->
+                            <TextBlock Grid.Column="2" 
+                                       Text="{Binding DurationString}"
+                                       Style="{StaticResource BodyTextStyle}"
+                                       VerticalAlignment="Center"
+                                       Margin="8,0,0,0" />
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </Grid>
+</Page>

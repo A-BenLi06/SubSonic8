@@ -45,6 +45,8 @@ namespace Client.Common.Services
 
         Func<int, IGetRandomSongsResult> GetRandomSongs { get; set; }
 
+        Func<string, IGetAlbumListResult> GetAlbumList { get; set; }
+
         #endregion
 
         #region Public Methods and Operators
@@ -54,6 +56,8 @@ namespace Client.Common.Services
         string GetCoverArtForId(string coverArt, ImageType imageType);
 
         Uri GetUriForFileWithId(string id);
+
+        Uri GetUriForFileWithId(string id, bool transcodeToMp3);
 
         Uri GetUriForVideoStartingAt(Uri source, double totalSeconds);
 

@@ -41,6 +41,7 @@
             RenamePlaylist = RenamePlaylistImpl;
             Ping = PingImpl;
             GetRandomSongs = GetRandomSongsImpl;
+            GetAlbumList = GetAlbumListImpl;
         }
 
         #endregion
@@ -99,6 +100,8 @@
 
         public Func<int, IGetRandomSongsResult> GetRandomSongs { get; set; }
 
+        public Func<string, IGetAlbumListResult> GetAlbumList { get; set; }
+
         public bool IsVideoPlaybackInitialized { get; set; }
 
         #endregion
@@ -132,13 +135,23 @@
 
         public virtual Uri GetUriForFileWithId(string id)
         {
-            return
-                new Uri(
-                    string.Format(
+            return GetUriForFileWithId(id, _configuration.CompatibleMode);
+        }
+
+        public virtual Uri GetUriForFileWithId(string id, bool transcodeToMp3)
+        {
+            var url = string.Format(
                         _configuration.RequestFormatWithUsernameAndPassword(),
                         "stream.view",
                         _configuration.Username,
-                        _configuration.EncodedPassword) + string.Format("&id={0}", id));
+                        _configuration.EncodedPassword) + string.Format("&id={0}", id);
+
+            if (transcodeToMp3)
+            {
+                url += "&format=mp3&maxBitRate=320";
+            }
+
+            return new Uri(url);
         }
 
         public Uri GetUriForVideoStartingAt(Uri source, double totalSeconds)
@@ -241,6 +254,11 @@
         private IGetRandomSongsResult GetRandomSongsImpl(int numberOfSongs)
         {
             return new GetRandomSongsResult(Configuration, numberOfSongs);
+        }
+
+        private IGetAlbumListResult GetAlbumListImpl(string musicFolderId)
+        {
+            return new GetAlbumListResult(Configuration, musicFolderId);
         }
 
         #endregion

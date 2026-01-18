@@ -131,13 +131,36 @@
         {
             if (subsonicModel.Type == SubsonicModelTypeEnum.Song || subsonicModel.Type == SubsonicModelTypeEnum.Video)
             {
-                var playlistItem = await LoadPlaylistItem(subsonicModel);
-                var addItemsMessage = new AddItemsMessage
-                                          {
-                                              Queue = new List<PlaylistItem> { playlistItem },
-                                              StartPlaying = true
-                                          };
-                EventAggregator.Publish(addItemsMessage);
+                // Get all songs/videos from current view
+                var allItems = MenuItems
+                    .Select(m => m.Item)
+                    .Where(item => item.Type == SubsonicModelTypeEnum.Song || item.Type == SubsonicModelTypeEnum.Video)
+                    .ToList();
+
+                if (allItems.Count > 0)
+                {
+                    // Find the index of the clicked item
+                    var clickedIndex = allItems.IndexOf(subsonicModel);
+                    if (clickedIndex < 0) clickedIndex = 0;
+
+                    // Reorder: clicked item first, then remaining items in order
+                    var orderedItems = allItems.Skip(clickedIndex).Concat(allItems.Take(clickedIndex)).ToList();
+
+                    // Load all playlist items
+                    var playlistItems = new List<PlaylistItem>();
+                    foreach (var item in orderedItems)
+                    {
+                        var playlistItem = await LoadPlaylistItem(item);
+                        playlistItems.Add(playlistItem);
+                    }
+
+                    var addItemsMessage = new AddItemsMessage
+                    {
+                        Queue = playlistItems,
+                        StartPlaying = true
+                    };
+                    EventAggregator.PublishOnUIThread(addItemsMessage);
+                }
             }
 
             NavigationService.NavigateByModelType(subsonicModel);
@@ -188,7 +211,7 @@
 
         private void SetAppBottomBar()
         {
-            EventAggregator.Publish(new ChangeBottomBarMessage { BottomBarViewModel = BottomBar });
+            EventAggregator.PublishOnUIThread(new ChangeBottomBarMessage { BottomBarViewModel = BottomBar });
         }
 
         private async void AwaitPopulate()

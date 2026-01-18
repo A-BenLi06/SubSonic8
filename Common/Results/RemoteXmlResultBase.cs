@@ -151,7 +151,7 @@
                 }
                 else
                 {
-                    throw new CommunicationException(
+                    throw new Exception(
                         string.Format(
                             "Response was:\r\nStatus Code: {0}\r\nReason: {1}", response.StatusCode, response.ReasonPhrase));
                 }
@@ -162,7 +162,7 @@
                                        ? exception.Message + "\r\n" + exception.InnerException.Message
                                        : exception.Message;
                 result.Exception =
-                    new CommunicationException(
+                    new Exception(
                         string.Format("Could not perform Http request.\r\nMessage:\r\n{0}", innerMessage), exception);
             }
             catch (Exception exception)

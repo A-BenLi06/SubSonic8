@@ -7,9 +7,9 @@
     {
         #region Public Methods and Operators
 
-        public static void Execute(this IEnumerable<IResult> results, ActionExecutionContext context = null)
+        public static void Execute(this IEnumerable<IResult> results, CoroutineExecutionContext context = null)
         {
-            new SequentialResult(results.GetEnumerator()).Execute(context ?? new ActionExecutionContext());
+            new SequentialResult(results.GetEnumerator()).Execute(context ?? new CoroutineExecutionContext());
         }
 
         #endregion

@@ -26,6 +26,8 @@
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Media.Imaging;
 
+    using Caliburn.Micro;
+
     public class PlaybackViewModel : PlaybackControlsViewModelBase, IPlaybackViewModel
     {
         #region Constants
@@ -413,7 +415,7 @@
 
         public void Handle(PlayFailedMessage message)
         {
-            EventAggregator.Publish(new StopMessage());
+            EventAggregator.PublishOnUIThread(new StopMessage());
             NotificationService.Show(new DialogNotificationOptions
                                          {
                                              Message = "Could not play item:\r\n" + message.ErrorMessage
@@ -487,7 +489,7 @@
 
             var pressedItem = (PlaylistItem)((ItemClickEventArgs)e).ClickedItem;
             var pressedItemIndex = PlaylistManagementService.Items.IndexOf(pressedItem);
-            EventAggregator.Publish(new PlayItemAtIndexMessage(pressedItemIndex));
+            EventAggregator.PublishOnUIThread(new PlayItemAtIndexMessage(pressedItemIndex));
         }
 
         public void OnVisualStateChanged(string state)
@@ -513,12 +515,12 @@
 
         public void ToggleRepeat()
         {
-            EventAggregator.Publish(new ToggleRepeatMessage());
+            EventAggregator.PublishOnUIThread(new ToggleRepeatMessage());
         }
 
         public void ToggleShuffle()
         {
-            EventAggregator.Publish(new ToggleShuffleMessage());
+            EventAggregator.PublishOnUIThread(new ToggleShuffleMessage());
         }
 
         #endregion
@@ -623,7 +625,7 @@
 
         private void SetAppBottomBar()
         {
-            EventAggregator.Publish(new ChangeBottomBarMessage { BottomBarViewModel = BottomBar });
+            EventAggregator.PublishOnUIThread(new ChangeBottomBarMessage { BottomBarViewModel = BottomBar });
         }
 
         private void SetPlaylistFilter(string filterText)
@@ -671,9 +673,9 @@
 
         private void SwitchVideoPlayback(PlaybackStateEventArgs eventArgs, IVideoPlayer videoPlayer)
         {
-            EventAggregator.Publish(new StopMessage());
+            EventAggregator.PublishOnUIThread(new StopMessage());
             PlayerManagementService.DefaultVideoPlayer = videoPlayer;
-            EventAggregator.Publish(new PlayMessage { Options = eventArgs });
+            EventAggregator.PublishOnUIThread(new PlayMessage { Options = eventArgs });
         }
 
         #endregion

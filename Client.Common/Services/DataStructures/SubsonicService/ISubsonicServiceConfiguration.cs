@@ -14,6 +14,8 @@ namespace Client.Common.Services.DataStructures.SubsonicService
 
         string EncodedPassword { get; }
 
+        bool CompatibleMode { get; set; }
+
         #endregion
     }
 }

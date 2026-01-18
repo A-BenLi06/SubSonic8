@@ -115,6 +115,11 @@ namespace Client.Tests.Mocks
             throw new NotImplementedException();
         }
 
+        public void TryClose(bool? dialogResult)
+        {
+            throw new NotImplementedException();
+        }
+
         public void CanClose(Action<bool> callback)
         {
             throw new NotImplementedException();

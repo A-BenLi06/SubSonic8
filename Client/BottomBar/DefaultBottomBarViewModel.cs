@@ -19,6 +19,8 @@
     using global::Common.Interfaces;
     using Action = System.Action;
 
+    using Caliburn.Micro;
+
     public class DefaultBottomBarViewModel : BottomBarViewModelBase, IDefaultBottomBarViewModel
     {
         #region Fields
@@ -128,7 +130,7 @@
                     addItemsMessage.StartPlaying = true;
                 }
 
-                EventAggregator.Publish(addItemsMessage);
+                EventAggregator.PublishOnUIThread(addItemsMessage);
             }
             else
             {
@@ -194,7 +196,7 @@
         {
             if (clearCurrent)
             {
-                EventAggregator.Publish(new StopMessage());
+                EventAggregator.PublishOnUIThread(new StopMessage());
                 PlaylistManagementService.Clear();
                 _playNextItem = true;
             }

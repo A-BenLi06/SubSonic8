@@ -92,7 +92,7 @@
                         {
                             Artist = "testArtist", 
                             Name = "testTitle", 
-                            Id = 121, 
+                            Id = "121", 
                             CoverArt = "test123", 
                             Duration = 123, 
                             IsVideo = true

@@ -10,6 +10,7 @@
     using Subsonic8.Framework.Extensions;
     using Subsonic8.MenuItem;
     using Windows.UI.Xaml.Controls;
+    using Caliburn.Micro;
 
     public class ManagePlaylistsViewModel : PlaylistViewModelBase, IManagePlaylistsViewModel
     {
@@ -43,7 +44,7 @@
 
         public void LoadPlaylist(Playlist playlist)
         {
-            EventAggregator.Publish(new StopMessage());
+            EventAggregator.PublishOnUIThread(new StopMessage());
             PlaylistManagementService.Clear();
             GoBack();
             var playlistItemCollection = new PlaylistItemCollection();
@@ -51,7 +52,7 @@
             PlaylistManagementService.LoadPlaylist(playlistItemCollection);
             if (playlistItemCollection.Count > 0)
             {
-                EventAggregator.Publish(new StartPlaybackMessage(playlistItemCollection.First()));
+                EventAggregator.PublishOnUIThread(new StartPlaybackMessage(playlistItemCollection.First()));
             }
         }
 

@@ -1,4 +1,4 @@
-﻿namespace Subsonic8.Index
+namespace Subsonic8.Index
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -10,13 +10,20 @@
     using Subsonic8.Framework.ViewModel;
     using Subsonic8.MenuItem;
 
-    public class IndexViewModel : DetailViewModelBase<IndexItem>, IIndexViewModel
+    public class IndexViewModel : CollectionViewModelBase<string, IList<Album>>, IIndexViewModel
     {
+        #region Fields
+
+        private string _indexName;
+
+        #endregion
+
         #region Constructors and Destructors
 
         public IndexViewModel()
         {
             MenuItems = new BindableCollection<MenuItemViewModel>();
+            UpdateDisplayName = () => DisplayName = _indexName ?? "Albums";
         }
 
         #endregion
@@ -29,31 +36,27 @@
             await result.WithErrorHandler(ErrorDialogViewModel).OnSuccess(r => SetIndexName(r, id)).Execute();
         }
 
-        protected override IEnumerable<IMediaModel> GetItemsToDisplay(IndexItem result)
+        protected override IEnumerable<IMediaModel> GetItemsToDisplay(IList<Album> result)
         {
-            return result.Artists;
+            return result;
         }
 
-        protected override IServiceResultBase<IndexItem> GetResult(string id)
+        protected override IServiceResultBase<IList<Album>> GetResult(string id)
         {
-            return SubsonicService.GetIndex(id);
+            return SubsonicService.GetAlbumList(id);
         }
 
         private void SetIndexName(IEnumerable<MusicFolder> musicFolders, string id)
         {
-            if (Item == null)
-            {
-                return;
-            }
-
             if (musicFolders == null || !musicFolders.Any())
             {
-                Item.Name = "Music";
+                _indexName = "Albums";
                 return;
             }
 
             var rootFolder = musicFolders.FirstOrDefault(f => f != null && f.Id == id);
-            Item.Name = rootFolder?.Name ?? "Music";
+            _indexName = rootFolder?.Name ?? "Albums";
+            UpdateDisplayName();
         }
 
         #endregion

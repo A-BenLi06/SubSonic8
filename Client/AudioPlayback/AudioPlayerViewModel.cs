@@ -131,7 +131,7 @@
             {
                 PlaybackStoped(this, new EventArgs());
             }
-            EventAggregator.Publish(new PlayNextMessage());
+            EventAggregator.PublishOnUIThread(new PlayNextMessage());
         }
 
         public void SongFailed(ExceptionRoutedEventArgs eventArgs)
@@ -140,7 +140,7 @@
             {
                 PlaybackStoped(this, new EventArgs());
             }
-            EventAggregator.Publish(new PlayFailedMessage(eventArgs.ErrorMessage, eventArgs.OriginalSource));
+            EventAggregator.PublishOnUIThread(new PlayFailedMessage(eventArgs.ErrorMessage, eventArgs.OriginalSource));
         }
 
         public void Stop()

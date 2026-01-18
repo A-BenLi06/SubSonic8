@@ -11,6 +11,7 @@
     using Playlists;
     using Shell;
     using VideoPlayback;
+    using Subsonic8.Services;
     using SubLastFm;
 
     public class ClientModule : MugenModuleWithAutoDiscoveryBase
@@ -21,6 +22,7 @@
         {
             Conventions.AddRange(new MugenConvetion[] { new ServiceConvention(Injector), new ViewModelConvention(Injector) });
             Singletons.Add<IEventAggregator, EventAggregator>();
+            Singletons.Add<ICharmsBarService, CharmsBarService>();
             Singletons.Add<IErrorDialogViewModel, ErrorDialogViewModel>(true);
             Singletons.Add<IShellViewModel, ShellViewModel>(true);
             Singletons.Add<IPlaybackViewModel, PlaybackViewModel>(true);

@@ -156,6 +156,11 @@
             throw new NotImplementedException();
         }
 
+        public void TryClose(bool? dialogResult)
+        {
+            throw new NotImplementedException();
+        }
+
         public void OnVisualStateChanged(string state)
         {
             throw new NotImplementedException();

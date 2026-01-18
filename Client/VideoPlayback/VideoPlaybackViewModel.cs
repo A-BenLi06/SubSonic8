@@ -10,6 +10,7 @@
     using Subsonic8.Framework.ViewModel;
     using Windows.UI.Xaml;
     using PlaylistItem = Client.Common.Models.PlaylistItem;
+    using Caliburn.Micro;
 
     public class VideoPlaybackViewModel : PlaybackControlsViewModelBase, IVidePlaybackViewModel
     {
@@ -17,7 +18,7 @@
 
         private TimeSpan _endTime;
 
-        private List<Action> _pendingPlayerActions;
+        private List<System.Action> _pendingPlayerActions;
 
         private IVideoPlayerView _playerControls;
 
@@ -31,7 +32,7 @@
 
         public VideoPlaybackViewModel()
         {
-            _pendingPlayerActions = new List<Action>();
+            _pendingPlayerActions = new List<System.Action>();
         }
 
         #endregion
@@ -125,7 +126,7 @@
 
         public void SongFailed(ExceptionRoutedEventArgs eventArgs)
         {
-            EventAggregator.Publish(new PlayFailedMessage(eventArgs.ErrorMessage, eventArgs.OriginalSource));
+            EventAggregator.PublishOnUIThread(new PlayFailedMessage(eventArgs.ErrorMessage, eventArgs.OriginalSource));
         }
 
         public void ClearSource()
@@ -161,7 +162,7 @@
             OnStartingPlayback();
             var startInfo = GetStartInfo(item, options as PlaybackStateEventArgs);
             Source = startInfo.Source;
-            _pendingPlayerActions = new List<Action>
+            _pendingPlayerActions = new List<System.Action>
                                         {
                                             () => _playerControls.SetStartTime(startInfo.StartTime.Negate()), 
                                             () => _playerControls.SetEndTime(startInfo.EndTime), 

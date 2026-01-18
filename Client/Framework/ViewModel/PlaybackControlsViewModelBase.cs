@@ -1,6 +1,7 @@
 ﻿namespace Subsonic8.Framework.ViewModel
 {
     using Client.Common.EventAggregatorMessages;
+    using Caliburn.Micro;
 
     public abstract class PlaybackControlsViewModelBase : ViewModelBase, IPlaybackControlsViewModel
     {
@@ -8,22 +9,22 @@
 
         public virtual void Next()
         {
-            EventAggregator.Publish(new JumpToNextMessage());
+            EventAggregator.PublishOnUIThread(new JumpToNextMessage());
         }
 
         public virtual void PlayPause()
         {
-            EventAggregator.Publish(new PlayPauseMessage());
+            EventAggregator.PublishOnUIThread(new PlayPauseMessage());
         }
 
         public virtual void Previous()
         {
-            EventAggregator.Publish(new JumpToPreviousMessage());
+            EventAggregator.PublishOnUIThread(new JumpToPreviousMessage());
         }
 
         public virtual void Stop()
         {
-            EventAggregator.Publish(new StopMessage());
+            EventAggregator.PublishOnUIThread(new StopMessage());
         }
 
         #endregion

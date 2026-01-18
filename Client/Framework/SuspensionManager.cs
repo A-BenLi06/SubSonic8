@@ -267,9 +267,14 @@
             var frameState = SessionStateForFrame(frame);
             if (frameState.ContainsKey("Navigation"))
             {
-                frame.SetNavigationState((string)frameState["Navigation"]);
+                // Navigation state restoration is disabled due to uncatchable 
+                // AccessViolationException in Frame.SetNavigationState when 
+                // the saved state becomes corrupted or references invalid pages.
+                // The app will start fresh from the main page instead.
+                frameState.Remove("Navigation");
             }
         }
+
 
         private static void SaveFrameNavigationState(Frame frame)
         {

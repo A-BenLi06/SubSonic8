@@ -165,6 +165,11 @@
             throw new NotImplementedException();
         }
 
+        public void TryClose(bool? dialogResult)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }

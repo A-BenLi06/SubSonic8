@@ -1,4 +1,4 @@
-﻿namespace Common.Behaviors
+﻿/*namespace Common.Behaviors
 {
     using Windows.UI.Interactivity;
     using Windows.UI.Xaml;
@@ -23,4 +23,4 @@
             Windows.UI.ViewManagement.ApplicationView.TryUnsnap();
         }
     }
-}
+} */

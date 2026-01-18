@@ -70,27 +70,27 @@
         {
             _mockPlyalistManagementService.Items.Add(new PlaylistItem { UriAsString = "http://view.view?id=1" });
             _mockPlyalistManagementService.Items.Add(new PlaylistItem { UriAsString = "http://view.view?id=2" });
-            Subject.MenuItems.Add(new MenuItemViewModel { Item = new Playlist { Name = "test", Id = 2 } });
+            Subject.MenuItems.Add(new MenuItemViewModel { Item = new Playlist { Name = "test", Id = "2" } });
             Subject.PlaylistName = "test";
 
             var existingPlaylist = new Playlist
                                        {
-                                           Id = 3,
+                                           Id = "3",
                                            Entries =
                                                new List<PlaylistEntry>
                                                    {
-                                                       new PlaylistEntry { Id = 1 }, 
-                                                       new PlaylistEntry { Id = 3 }
+                                                       new PlaylistEntry { Id = "1" }, 
+                                                       new PlaylistEntry { Id = "3" }
                                                    }
                                        };
 
             var callCount = 0;
-            MockSubsonicService.GetPlaylist = id => new MockGetPlaylistResult { GetResultFunc = () => existingPlaylist };
-            MockSubsonicService.UpdatePlaylist = (id, songIdsToAdd, songIndexesToRemove) =>
+            MockSubsonicService.GetPlaylist = (string id) => new MockGetPlaylistResult { GetResultFunc = () => existingPlaylist };
+            MockSubsonicService.UpdatePlaylist = (string id, IEnumerable<string> songIdsToAdd, IEnumerable<int> songIndexesToRemove) =>
                 {
                     callCount++;
-                    id.Should().Be(3);
-                    songIdsToAdd.Should().BeEquivalentTo(new List<int> { 2 });
+                    id.Should().Be("3");
+                    songIdsToAdd.Should().BeEquivalentTo(new List<string> { "2" });
                     songIndexesToRemove.Should().BeEquivalentTo(new List<int> { 1 });
                     return new MockUpdatePlaylistResult();
                 };
@@ -104,14 +104,14 @@
         public async Task
             Save_MenuItemsContainsPlaylistWithSameNameAsPlaylistName_WillCallSubsonicServiceGetPlaylistWithThePlaylistId()
         {
-            Subject.MenuItems.Add(new MenuItemViewModel { Item = new Playlist { Name = "test", Id = 2 } });
+            Subject.MenuItems.Add(new MenuItemViewModel { Item = new Playlist { Name = "test", Id = "2" } });
             Subject.PlaylistName = "test";
 
             var callCount = 0;
-            MockSubsonicService.GetPlaylist = id =>
+            MockSubsonicService.GetPlaylist = (string id) =>
                 {
                     callCount++;
-                    id.Should().Be(2);
+                    id.Should().Be("2");
                     return new MockGetPlaylistResult { GetResultFunc = () => new Playlist() };
                 };
 
@@ -126,15 +126,15 @@
         {
             _mockPlyalistManagementService.Items.Add(new PlaylistItem { UriAsString = "http://view.view?id=1" });
             _mockPlyalistManagementService.Items.Add(new PlaylistItem { UriAsString = "http://view.view?id=2" });
-            Subject.MenuItems.Add(new MenuItemViewModel { Item = new Playlist { Name = "test", Id = 2 } });
+            Subject.MenuItems.Add(new MenuItemViewModel { Item = new Playlist { Name = "test", Id = "2" } });
             Subject.PlaylistName = "test2";
 
             var callCount = 0;
-            MockSubsonicService.CreatePlaylist = (playlistName, songIdsToAdd) =>
+            MockSubsonicService.CreatePlaylist = (string playlistName, IEnumerable<string> songIdsToAdd) =>
                 {
                     callCount++;
                     playlistName.Should().Be("test2");
-                    songIdsToAdd.Should().BeEquivalentTo(new List<int> { 1, 2 });
+                    songIdsToAdd.Should().BeEquivalentTo(new List<string> { "1", "2" });
                     return new MockCreatePlaylistResult();
                 };
 

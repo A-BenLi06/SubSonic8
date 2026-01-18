@@ -189,22 +189,22 @@
 
         public virtual void PlayNext()
         {
-            EventAggregator.Publish(new JumpToNextMessage());
+            EventAggregator.PublishOnUIThread(new JumpToNextMessage());
         }
 
         public virtual void PlayPause()
         {
-            EventAggregator.Publish(new PlayPauseMessage());
+            EventAggregator.PublishOnUIThread(new PlayPauseMessage());
         }
 
         public virtual void PlayPrevious()
         {
-            EventAggregator.Publish(new JumpToPreviousMessage());
+            EventAggregator.PublishOnUIThread(new JumpToPreviousMessage());
         }
 
         public virtual void Stop()
         {
-            EventAggregator.Publish(new StopMessage());
+            EventAggregator.PublishOnUIThread(new StopMessage());
         }
 
         #endregion

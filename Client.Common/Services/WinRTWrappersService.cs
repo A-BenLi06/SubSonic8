@@ -6,11 +6,9 @@
     using System.Threading.Tasks;
     using System.Xml.Serialization;
     using Windows.ApplicationModel.DataTransfer;
-    using Windows.ApplicationModel.Search;
     using Windows.Foundation;
     using Windows.Storage;
     using Windows.Storage.Pickers;
-    using Windows.UI.ApplicationSettings;
     using Helpers;
     using MetroLog;
 
@@ -67,17 +65,6 @@
         public void RegisterMediaControlHandler(IMediaControlHandler mediaControlHandler)
         {
             mediaControlHandler.Register();
-        }
-
-        public void RegisterSearchQueryHandler(TypedEventHandler<SearchPane, SearchPaneQuerySubmittedEventArgs> handler)
-        {
-            SearchPane.GetForCurrentView().QuerySubmitted += handler;
-        }
-
-        public void RegisterSettingsRequestedHandler(
-            TypedEventHandler<SettingsPane, SettingsPaneCommandsRequestedEventArgs> handler)
-        {
-            SettingsPane.GetForCurrentView().CommandsRequested += handler;
         }
 
         public async Task SaveToFile<T>(IStorageFile storageFile, T @object)

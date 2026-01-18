@@ -148,15 +148,15 @@
         {
             IoC.GetInstance = (type, s) => null;
 
-            _expandedArtist = new ExpandedArtist { Id = 42, AlbumCount = 12, Name = "artist" };
+            _expandedArtist = new ExpandedArtist { Id = "42", AlbumCount = 12, Name = "artist" };
             _artistMenuItemViewModel = _expandedArtist.AsMenuItemViewModel();
             _artistMusicDirectoryChild = _artistMenuItemViewModel.Item.As<ISubsonicModel>();
 
-            _album = new Album { Id = 24, SongCount = 12, Name = "album" };
+            _album = new Album { Id = "24", SongCount = 12, Name = "album" };
             _albumMenuItemViewModel = _album.AsMenuItemViewModel();
             _albumMusicDirectoryChild = _albumMenuItemViewModel.Item.As<ISubsonicModel>();
 
-            _song = new Song { Id = 12, Title = "song", Artist = "artist", Album = "album" };
+            _song = new Song { Id = "12", Title = "song", Artist = "artist", Album = "album" };
             _songMenuItemViewModel = _song.AsMenuItemViewModel();
             _songMusicDirectoryChild = _songMenuItemViewModel.Item.As<ISubsonicModel>();
         }

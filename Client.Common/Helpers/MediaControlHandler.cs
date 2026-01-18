@@ -48,16 +48,16 @@
             {
                 case SystemMediaTransportControlsButton.Play:
                 case SystemMediaTransportControlsButton.Pause:
-                    _eventAggregator.Publish(new PlayPauseMessage());
+                    _eventAggregator.PublishOnUIThreadAsync(new PlayPauseMessage());
                     break;
                 case SystemMediaTransportControlsButton.Stop:
-                    _eventAggregator.Publish(new StopMessage());
+                    _eventAggregator.PublishOnUIThreadAsync(new StopMessage());
                     break;
                 case SystemMediaTransportControlsButton.Next:
-                    _eventAggregator.Publish(new JumpToNextMessage());
+                    _eventAggregator.PublishOnUIThreadAsync(new JumpToNextMessage());
                     break;
                 case SystemMediaTransportControlsButton.Previous:
-                    _eventAggregator.Publish(new JumpToPreviousMessage());
+                    _eventAggregator.PublishOnUIThreadAsync(new JumpToPreviousMessage());
                     break;
             }
         }

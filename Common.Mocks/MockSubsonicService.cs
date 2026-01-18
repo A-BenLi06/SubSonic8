@@ -58,6 +58,19 @@
             return new Uri(string.Format("http://subsonic.org?id={0}", id));
         }
 
+        public override Uri GetUriForFileWithId(string id, bool transcodeToMp3)
+        {
+            GetUriForFileWithIdCallCount++;
+
+            var url = string.Format("http://subsonic.org?id={0}", id);
+            if (transcodeToMp3)
+            {
+                url += "&format=mp3&maxBitRate=320";
+            }
+
+            return new Uri(url);
+        }
+
         public override Uri GetUriForVideoWithId(string id, int timeOffset = 0, int maxBitrate = 0)
         {
             GetUriForVideoWithIdCallCount++;

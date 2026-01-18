@@ -4,6 +4,7 @@
     using System.Linq;
     using Client.Common.EventAggregatorMessages;
     using Client.Common.Models;
+    using Caliburn.Micro;
 
     public class PlaybackBottomBarViewModel : BottomBarViewModelBase, IPlaybackBottomBarViewModel
     {
@@ -27,7 +28,7 @@
 
         public void RemoveFromPlaylist()
         {
-            EventAggregator.Publish(
+            EventAggregator.PublishOnUIThread(
                 new RemoveItemsMessage { Queue = SelectedItems.Select(x => (PlaylistItem)x).ToList() });
         }
 

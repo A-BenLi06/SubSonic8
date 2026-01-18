@@ -27,11 +27,11 @@
         public async Task DeletePlaylist_Always_CallsDeletePlaylistWithTheFirstSelectedItemsId()
         {
             var callCount = 0;
-            Subject.SelectedItems.Add(new MenuItemViewModel { Item = new Playlist { Id = 5 } });
-            _mockSubsonicService.DeletePlaylist = playlistId =>
+            Subject.SelectedItems.Add(new MenuItemViewModel { Item = new Playlist { Id = "5" } });
+            _mockSubsonicService.DeletePlaylist = (string playlistId) =>
                 {
                     callCount++;
-                    playlistId.Should().Be(5);
+                    playlistId.Should().Be("5");
 
                     return new DeletePlaylistResult(new SubsonicServiceConfiguration(), playlistId);
                 };
@@ -45,11 +45,11 @@
         public async Task RenamePlaylist_Always_CallRenamePlaylistWithTheFirstSelectedItemsId()
         {
             var callCount = 0;
-            Subject.SelectedItems.Add(new MenuItemViewModel { Item = new Playlist { Id = 5 } });
-            _mockSubsonicService.RenamePlaylist = (playlistId, playlistName) =>
+            Subject.SelectedItems.Add(new MenuItemViewModel { Item = new Playlist { Id = "5" } });
+            _mockSubsonicService.RenamePlaylist = (string playlistId, string playlistName) =>
                 {
                     callCount++;
-                    playlistId.Should().Be(5);
+                    playlistId.Should().Be("5");
                     playlistName.Should().Be("test");
 
                     return new MockRenamePlaylistResult();

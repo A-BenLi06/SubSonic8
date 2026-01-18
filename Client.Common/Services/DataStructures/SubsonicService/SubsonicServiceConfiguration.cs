@@ -126,6 +126,27 @@
             }
         }
 
+        private bool _compatibleMode;
+
+        public bool CompatibleMode
+        {
+            get
+            {
+                return _compatibleMode;
+            }
+
+            set
+            {
+                if (_compatibleMode == value)
+                {
+                    return;
+                }
+
+                _compatibleMode = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         #endregion
 
         #region Methods

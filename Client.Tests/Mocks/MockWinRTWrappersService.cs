@@ -5,10 +5,8 @@
     using Client.Common.Helpers;
     using Client.Common.Services;
     using Windows.ApplicationModel.DataTransfer;
-    using Windows.ApplicationModel.Search;
     using Windows.Foundation;
     using Windows.Storage;
-    using Windows.UI.ApplicationSettings;
 
     public class MockWinRTWrappersService : IWinRTWrappersService
     {
@@ -27,10 +25,6 @@
         public int GetNewStorageFileCallCount { get; set; }
 
         public Func<IStorageFile> GetNewStorageFileFunc { get; set; }
-
-        public int RegisterSearchQueryHandlerCallCount { get; set; }
-
-        public int RegisterSettingsRequestedHandlerCallCount { get; set; }
 
         public Action<IStorageFile, object> SaveToFileAction { get; set; }
 
@@ -71,16 +65,7 @@
         {
         }
 
-        public void RegisterSearchQueryHandler(TypedEventHandler<SearchPane, SearchPaneQuerySubmittedEventArgs> handler)
-        {
-            RegisterSearchQueryHandlerCallCount++;
-        }
 
-        public void RegisterSettingsRequestedHandler(
-            TypedEventHandler<SettingsPane, SettingsPaneCommandsRequestedEventArgs> handler)
-        {
-            RegisterSettingsRequestedHandlerCallCount++;
-        }
 
         public Task SaveToFile<T>(IStorageFile storageFile, T @object)
         {

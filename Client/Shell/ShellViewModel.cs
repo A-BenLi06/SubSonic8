@@ -20,6 +20,7 @@
     using Playback;
     using Search;
     using Settings;
+    using Services;
 
     using Subsonic8.AudioPlayback;
 
@@ -105,6 +106,9 @@
         public IWinRTWrappersService WinRTWrappersService { get; set; }
 
         [Inject]
+        public ICharmsBarService CharmsBarService { get; set; }
+
+        [Inject]
         public IErrorDialogViewModel ErrorDialogViewModel { get; set; }
 
         [Inject]
@@ -159,10 +163,10 @@
 
         private async Task InitializeViewDependentServices(object view)
         {
-            WinRTWrappersService.RegisterSearchQueryHandler((sender, args) => SendSearchQueryMessage(args.QueryText));
-            WinRTWrappersService.RegisterSettingsRequestedHandler(
+            CharmsBarService.RegisterSearchQueryHandler((sender, args) => SendSearchQueryMessage(args.QueryText));
+            CharmsBarService.RegisterSettingsRequestedHandler(
                 (sender, args) => args.AddSetting<SettingsViewModel>());
-            WinRTWrappersService.RegisterSettingsRequestedHandler(
+            CharmsBarService.RegisterSettingsRequestedHandler(
                 (sender, args) => args.AddSetting<PrivacyPolicyViewModel>());
             WinRTWrappersService.RegisterMediaControlHandler(new MediaControlHandler(_eventAggregator));
 

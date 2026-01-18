@@ -57,19 +57,19 @@
             AddToPlaylist_QueHasItemOfTypeArtist_CallsSubsonicServiceGetArtistAndAddsAllSongsFromAllAlbumsToThePlaylist()
         {
             MockLoadModel();
-            Subject.SelectedItems.Add(new MenuItemViewModel { Item = new ExpandedArtist { Id = 5 } });
+            Subject.SelectedItems.Add(new MenuItemViewModel { Item = new ExpandedArtist { Id = "5" } });
             var albums = new List<Album> { new Album(), new Album() };
             var artist = new ExpandedArtist { Albums = albums };
             var mockGetAlbumResult = new MockGetArtistResult { GetResultFunc = () => artist };
             var callCount = 0;
-            _mockSubsonicService.GetArtist = albumId =>
+            _mockSubsonicService.GetArtist = (string albumId) =>
                 {
                     callCount++;
-                    albumId.Should().Be(5);
+                    albumId.Should().Be("5");
                     return mockGetAlbumResult;
                 };
             var getAlbumCallCount = 0;
-            _mockSubsonicService.GetAlbum = artistId =>
+            _mockSubsonicService.GetAlbum = (string artistId) =>
                 {
                     getAlbumCallCount++;
                     return new MockGetAlbumResult
@@ -97,18 +97,18 @@
                         Item =
                             new IndexItem
                                 {
-                                    Id = 5,
-                                    Artists = new List<Artist> { new Artist { Id = 3 } }
+                                    Id = "5",
+                                    Artists = new List<Artist> { new Artist { Id = "3" } }
                                 }
                     });
             var children = new List<MusicDirectoryChild> { new MusicDirectoryChild(), new MusicDirectoryChild() };
             var musicDirectory = new MusicDirectory { Children = children };
             var mockGetMusicDirectoryResult = new MockGetMusicDirectoryResult { GetResultFunc = () => musicDirectory };
             var callCount = 0;
-            _mockSubsonicService.GetMusicDirectory = directoryId =>
+            _mockSubsonicService.GetMusicDirectory = (string directoryId) =>
                 {
                     callCount++;
-                    directoryId.Should().Be(3);
+                    directoryId.Should().Be("3");
                     return mockGetMusicDirectoryResult;
                 };
 
@@ -124,15 +124,15 @@
             AddToPlaylist_QueHasItemOfTypeMusicDirectory_CallsSubsonicServiceGetMusicDirectoriesAndAddsAllSongsToThePlaylist()
         {
             MockLoadModel();
-            Subject.SelectedItems.Add(new MenuItemViewModel { Item = new MusicDirectory { Id = 5 } });
+            Subject.SelectedItems.Add(new MenuItemViewModel { Item = new MusicDirectory { Id = "5" } });
             var children = new List<MusicDirectoryChild> { new MusicDirectoryChild(), new MusicDirectoryChild() };
             var musicDirectory = new MusicDirectory { Children = children };
             var mockGetAlbumResult = new MockGetMusicDirectoryResult { GetResultFunc = () => musicDirectory };
             var callCount = 0;
-            _mockSubsonicService.GetMusicDirectory = directoryId =>
+            _mockSubsonicService.GetMusicDirectory = (string directoryId) =>
                 {
                     callCount++;
-                    directoryId.Should().Be(5);
+                    directoryId.Should().Be("5");
                     return mockGetAlbumResult;
                 };
 
@@ -148,15 +148,15 @@
             AddToPlaylist_SelectedItemsHasItemOfTypeAlbum_CallsSubsonicServiceGetAlbumAndAdsAllItsSongsToThePlaylist()
         {
             MockLoadModel();
-            Subject.SelectedItems.Add(new MenuItemViewModel { Item = new Album { Id = 5 } });
+            Subject.SelectedItems.Add(new MenuItemViewModel { Item = new Album { Id = "5" } });
             var songs = new List<Song> { new Song(), new Song() };
             var album = new Album { Songs = songs };
             var mockGetAlbumResult = new MockGetAlbumResult { GetResultFunc = () => album };
             var callCount = 0;
-            _mockSubsonicService.GetAlbum = albumId =>
+            _mockSubsonicService.GetAlbum = (string albumId) =>
                 {
                     callCount++;
-                    albumId.Should().Be(5);
+                    albumId.Should().Be("5");
                     return mockGetAlbumResult;
                 };
 

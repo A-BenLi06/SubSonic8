@@ -385,7 +385,7 @@
                 return;
             }
 
-            _eventAggregator.Publish(new PausePlaybackMessage(CurrentItem));
+            _eventAggregator.PublishOnUIThreadAsync(new PausePlaybackMessage(CurrentItem));
             IsPaused = true;
         }
 
@@ -422,7 +422,7 @@
 
         public void Resume()
         {
-            _eventAggregator.Publish(new ResumePlaybackMessage(CurrentItem));
+            _eventAggregator.PublishOnUIThreadAsync(new ResumePlaybackMessage(CurrentItem));
             IsPlaying = true;
         }
 
@@ -451,7 +451,7 @@
                 return;
             }
 
-            _eventAggregator.Publish(new StopPlaybackMessage(CurrentItem));
+            _eventAggregator.PublishOnUIThreadAsync(new StopPlaybackMessage(CurrentItem));
             CurrentItem.PlayingState = PlaylistItemState.NotPlaying;
             IsPlaying = false;
             IsPaused = false;
@@ -486,14 +486,14 @@
 
             if (becameNotEmpty || becameEmpty)
             {
-                _eventAggregator.Publish(new PlaylistStateChangedMessage(Items.Any()));
+                _eventAggregator.PublishOnUIThreadAsync(new PlaylistStateChangedMessage(Items.Any()));
                 _wasEmpty = !Items.Any();
             }
         }
 
         private void StartCurrentItemPlayback(object options = null)
         {
-            _eventAggregator.Publish(new StartPlaybackMessage(CurrentItem) { Options = options });
+            _eventAggregator.PublishOnUIThreadAsync(new StartPlaybackMessage(CurrentItem) { Options = options });
             CurrentItem.PlayingState = PlaylistItemState.Playing;
             IsPlaying = true;
         }
