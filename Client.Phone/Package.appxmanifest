@@ -16,10 +16,9 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Subsonic8.Phone.App">
-      <m3:VisualElements DisplayName="SubSonic8" Square150x150Logo="Assets\Logo.scale-240.png" Square44x44Logo="Assets\SmallLogo.scale-240.png" Description="SubSonic8 - Music streaming client" ForegroundText="light" BackgroundColor="#464646">
-        <m3:DefaultTile Wide310x150Logo="Assets\WideLogo.scale-240.png" Square71x71Logo="Assets\Square71x71Logo.scale-240.png">
+      <m3:VisualElements DisplayName="SubSonic8" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="SubSonic8 - Music streaming client" ForegroundText="light" BackgroundColor="#464646">
+        <m3:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square71x71Logo="Assets\Square71x71Logo.png">
         </m3:DefaultTile>
-        <m3:SplashScreen Image="Assets\SplashScreen.scale-240.png" />
       </m3:VisualElements>
       <Extensions>
         <Extension Category="windows.backgroundTasks" EntryPoint="Client.Phone.BackgroundAudioTask.AudioTask">
@@ -33,7 +32,6 @@
   <Capabilities>
     <Capability Name="internetClientServer" />
     <Capability Name="musicLibrary" />
-
     <Capability Name="privateNetworkClientServer" />
   </Capabilities>
 </Package>
