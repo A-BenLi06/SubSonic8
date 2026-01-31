@@ -217,6 +217,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DataStructures\SubsonicService\SubsonicServiceConfigurationExtensions.cs" />
     <Compile Include="Services\WinRTWrappersService.cs" />
+    <Compile Include="Services\INetworkDetectionService.cs" />
+    <Compile Include="Services\NetworkDetectionService.cs" />
+    <Compile Include="Services\IRouteSelectionService.cs" />
+    <Compile Include="Services\RouteSelectionService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Caliburn.Micro, Version=3.2.0.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">

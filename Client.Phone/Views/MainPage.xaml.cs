@@ -56,18 +56,91 @@ namespace Subsonic8.Phone.Views
             try
             {
                 var settings = ApplicationData.Current.LocalSettings;
-                if (settings.Values.ContainsKey("BaseUrl"))
+                
+                // Load credentials
+                config.Username = settings.Values.ContainsKey("Username") 
+                    ? settings.Values["Username"] as string : string.Empty;
+                config.Password = settings.Values.ContainsKey("Password") 
+                    ? settings.Values["Password"] as string : string.Empty;
+                config.CompatibleMode = settings.Values.ContainsKey("CompatibleMode") 
+                    && (bool)settings.Values["CompatibleMode"];
+
+                // Load dual URLs
+                var primaryUrl = settings.Values.ContainsKey("PrimaryUrl") 
+                    ? settings.Values["PrimaryUrl"] as string : string.Empty;
+                var secondaryUrl = settings.Values.ContainsKey("SecondaryUrl") 
+                    ? settings.Values["SecondaryUrl"] as string : string.Empty;
+                
+                // Backwards compatibility: migrate old BaseUrl
+                if (string.IsNullOrEmpty(primaryUrl) && settings.Values.ContainsKey("BaseUrl"))
                 {
-                    config.BaseUrl = settings.Values["BaseUrl"] as string;
-                    config.Username = settings.Values["Username"] as string;
-                    config.Password = settings.Values["Password"] as string;
-                    config.CompatibleMode = settings.Values.ContainsKey("CompatibleMode") 
-                        && (bool)settings.Values["CompatibleMode"];
+                    primaryUrl = settings.Values["BaseUrl"] as string;
+                }
+
+                config.PrimaryUrl = primaryUrl;
+                config.SecondaryUrl = secondaryUrl;
+
+                // Perform route selection to find working URL
+                if (!string.IsNullOrEmpty(primaryUrl) || !string.IsNullOrEmpty(secondaryUrl))
+                {
+                    var networkService = new NetworkDetectionService();
+                    var routeService = new RouteSelectionService(networkService);
+
+                    var result = await routeService.SelectBestRouteAsync(
+                        primaryUrl,
+                        secondaryUrl,
+                        config.Username,
+                        config.Password);
+
+                    if (result.Success)
+                    {
+                        config.BaseUrl = result.SelectedUrl;
+                    }
+                    else
+                    {
+                        // Fallback: prefer SecondaryUrl (external/DDNS) over PrimaryUrl (internal)
+                        config.BaseUrl = !string.IsNullOrEmpty(secondaryUrl) ? secondaryUrl : primaryUrl;
+                    }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                // Use defaults
+                // Log error for debugging
+                System.Diagnostics.Debug.WriteLine("LoadConfiguration error: " + ex.Message);
+                
+                // Ensure BaseUrl is set even if route selection fails
+                try
+                {
+                    var settings = ApplicationData.Current.LocalSettings;
+                    var primaryUrl = settings.Values.ContainsKey("PrimaryUrl") 
+                        ? settings.Values["PrimaryUrl"] as string : string.Empty;
+                    var secondaryUrl = settings.Values.ContainsKey("SecondaryUrl") 
+                        ? settings.Values["SecondaryUrl"] as string : string.Empty;
+                    
+                    // Backwards compatibility
+                    if (string.IsNullOrEmpty(primaryUrl) && settings.Values.ContainsKey("BaseUrl"))
+                    {
+                        primaryUrl = settings.Values["BaseUrl"] as string;
+                    }
+                    
+                    // Prefer SecondaryUrl (DDNS) for external network fallback
+                    config.BaseUrl = !string.IsNullOrEmpty(secondaryUrl) ? secondaryUrl : primaryUrl;
+                    config.PrimaryUrl = primaryUrl;
+                    config.SecondaryUrl = secondaryUrl;
+                    
+                    // Load credentials if not already loaded
+                    if (string.IsNullOrEmpty(config.Username))
+                    {
+                        config.Username = settings.Values.ContainsKey("Username") 
+                            ? settings.Values["Username"] as string : string.Empty;
+                        config.Password = settings.Values.ContainsKey("Password") 
+                            ? settings.Values["Password"] as string : string.Empty;
+                    }
+                }
+                catch
+                {
+                    // Last resort fallback - use defaults
+                }
             }
 
             return config;

@@ -16,6 +16,16 @@ namespace Client.Common.Services.DataStructures.SubsonicService
 
         bool CompatibleMode { get; set; }
 
+        /// <summary>
+        /// Primary server URL (e.g., internal IP or DDNS).
+        /// </summary>
+        string PrimaryUrl { get; set; }
+
+        /// <summary>
+        /// Secondary/fallback server URL (e.g., DDNS or internal IP).
+        /// </summary>
+        string SecondaryUrl { get; set; }
+
         #endregion
     }
 }

@@ -72,7 +72,9 @@
         {
             get
             {
-                var bytes = Encoding.UTF8.GetBytes(string.Format("{0}:{1}", Username, Password));
+                var user = Username ?? string.Empty;
+                var pwd = Password ?? string.Empty;
+                var bytes = Encoding.UTF8.GetBytes(string.Format("{0}:{1}", user, pwd));
 
                 return Convert.ToBase64String(bytes);
             }
@@ -82,7 +84,8 @@
         {
             get
             {
-                return "enc:" + BytesToHex(Encoding.UTF8.GetBytes(Password)).ToLowerInvariant();
+                var pwd = Password ?? string.Empty;
+                return "enc:" + BytesToHex(Encoding.UTF8.GetBytes(pwd)).ToLowerInvariant();
             }
         }
 
@@ -143,6 +146,54 @@
                 }
 
                 _compatibleMode = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        private string _primaryUrl;
+
+        /// <summary>
+        /// Primary server URL (e.g., internal IP or DDNS).
+        /// </summary>
+        public string PrimaryUrl
+        {
+            get
+            {
+                return _primaryUrl;
+            }
+
+            set
+            {
+                if (value == _primaryUrl)
+                {
+                    return;
+                }
+
+                _primaryUrl = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        private string _secondaryUrl;
+
+        /// <summary>
+        /// Secondary/fallback server URL (e.g., DDNS or internal IP).
+        /// </summary>
+        public string SecondaryUrl
+        {
+            get
+            {
+                return _secondaryUrl;
+            }
+
+            set
+            {
+                if (value == _secondaryUrl)
+                {
+                    return;
+                }
+
+                _secondaryUrl = value;
                 NotifyOfPropertyChange();
             }
         }

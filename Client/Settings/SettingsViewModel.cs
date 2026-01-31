@@ -51,7 +51,9 @@ namespace Subsonic8.Settings
             {
                 return Configuration != null
                        && !string.IsNullOrWhiteSpace(Configuration.SubsonicServiceConfiguration.Username)
-                       && !string.IsNullOrWhiteSpace(Configuration.SubsonicServiceConfiguration.Password);
+                       && !string.IsNullOrWhiteSpace(Configuration.SubsonicServiceConfiguration.Password)
+                       && (!string.IsNullOrWhiteSpace(Configuration.SubsonicServiceConfiguration.PrimaryUrl)
+                           || !string.IsNullOrWhiteSpace(Configuration.SubsonicServiceConfiguration.SecondaryUrl));
             }
         }
 
@@ -102,13 +104,52 @@ namespace Subsonic8.Settings
             await _storageService.Save(Configuration);
             UpdateCredentials();
 
-            _subsonicService.Configuration = Configuration.SubsonicServiceConfiguration;
+            var svcConfig = Configuration.SubsonicServiceConfiguration;
+
+            // Perform route selection to find the best working URL
+            if (!string.IsNullOrEmpty(svcConfig.PrimaryUrl) || !string.IsNullOrEmpty(svcConfig.SecondaryUrl))
+            {
+                var networkService = new NetworkDetectionService();
+                var routeService = new RouteSelectionService(networkService);
+
+                var result = await routeService.SelectBestRouteAsync(
+                    svcConfig.PrimaryUrl,
+                    svcConfig.SecondaryUrl,
+                    svcConfig.Username,
+                    svcConfig.Password);
+
+                if (result.Success)
+                {
+                    svcConfig.BaseUrl = result.SelectedUrl;
+                }
+                else
+                {
+                    // Fallback: prefer SecondaryUrl (external/DDNS) over PrimaryUrl (internal)
+                    svcConfig.BaseUrl = !string.IsNullOrEmpty(svcConfig.SecondaryUrl)
+                        ? svcConfig.SecondaryUrl
+                        : svcConfig.PrimaryUrl;
+                }
+            }
+
+            _subsonicService.Configuration = svcConfig;
             _notificationService.EnableNotifications = Configuration.UseToastNotifications;
         }
 
         public void UsernameChanged(TextBox textBox)
         {
             Configuration.SubsonicServiceConfiguration.Username = textBox.Text;
+            NotifyOfPropertyChange(() => CanApplyChanges);
+        }
+
+        public void PrimaryUrlChanged(TextBox textBox)
+        {
+            Configuration.SubsonicServiceConfiguration.PrimaryUrl = textBox.Text;
+            NotifyOfPropertyChange(() => CanApplyChanges);
+        }
+
+        public void SecondaryUrlChanged(TextBox textBox)
+        {
+            Configuration.SubsonicServiceConfiguration.SecondaryUrl = textBox.Text;
             NotifyOfPropertyChange(() => CanApplyChanges);
         }
 

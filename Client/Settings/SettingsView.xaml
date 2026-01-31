@@ -8,9 +8,23 @@
     d:DesignWidth="400">
 
     <StackPanel HorizontalAlignment="Stretch">
-        <TextBlock Text="Subsonic Url" Style="{StaticResource SettingsTextStyle}" />
-        <TextBox x:Name="Configuration_SubsonicServiceConfiguration_BaseUrl"
-                 Style="{StaticResource SettingsTextBoxStyle}" />
+        <TextBlock Text="Primary URL" Style="{StaticResource SettingsTextStyle}" />
+        <TextBox x:Name="Configuration_SubsonicServiceConfiguration_PrimaryUrl"
+                 PlaceholderText="e.g. http://192.168.1.100:4040"
+                 Style="{StaticResource SettingsTextBoxStyle}"
+                 cal:Message.Attach="[Event TextChanged]=[Action PrimaryUrlChanged($source)]" />
+
+        <TextBlock Text="Secondary URL" Style="{StaticResource SettingsTextStyle}" />
+        <TextBox x:Name="Configuration_SubsonicServiceConfiguration_SecondaryUrl"
+                 PlaceholderText="e.g. https://music.example.com"
+                 Style="{StaticResource SettingsTextBoxStyle}"
+                 cal:Message.Attach="[Event TextChanged]=[Action SecondaryUrlChanged($source)]" />
+
+        <TextBlock x:Name="UrlValidationMessage" 
+                   Foreground="Red" 
+                   Visibility="Collapsed"
+                   Text="At least one URL is required"
+                   Margin="0,0,0,10" />
 
         <TextBlock Text="Username" Style="{StaticResource SettingsTextStyle}" />
         <TextBox Text="{Binding Path=Configuration.SubsonicServiceConfiguration.Username}"

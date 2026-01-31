@@ -44,9 +44,35 @@
         public async Task LoadSettings()
         {
             var subsonic8Configuration = await GetSubsonic8Configuration();
+            var svcConfig = subsonic8Configuration.SubsonicServiceConfiguration;
 
-            SubsonicService.Configuration = subsonic8Configuration.SubsonicServiceConfiguration;
+            // Perform route selection to find the best working URL
+            if (!string.IsNullOrEmpty(svcConfig.PrimaryUrl) || !string.IsNullOrEmpty(svcConfig.SecondaryUrl))
+            {
+                var networkService = new NetworkDetectionService();
+                var routeService = new RouteSelectionService(networkService);
 
+                var result = await routeService.SelectBestRouteAsync(
+                    svcConfig.PrimaryUrl,
+                    svcConfig.SecondaryUrl,
+                    svcConfig.Username,
+                    svcConfig.Password);
+
+                if (result.Success)
+                {
+                    svcConfig.BaseUrl = result.SelectedUrl;
+                }
+                else
+                {
+                    // Fallback: prefer SecondaryUrl (external/DDNS) over PrimaryUrl (internal)
+                    // This is safer for mobile networks where internal IPs won't work
+                    svcConfig.BaseUrl = !string.IsNullOrEmpty(svcConfig.SecondaryUrl)
+                        ? svcConfig.SecondaryUrl
+                        : svcConfig.PrimaryUrl;
+                }
+            }
+
+            SubsonicService.Configuration = svcConfig;
             ToastNotificationService.EnableNotifications = subsonic8Configuration.UseToastNotifications;
         }
 

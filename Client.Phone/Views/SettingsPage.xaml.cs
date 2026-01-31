@@ -13,22 +13,26 @@ namespace Subsonic8.Phone.Views
     public sealed partial class SettingsPage : Page
     {
         // Control references
-        private TextBox _serverUrlTextBox;
+        private TextBox _primaryUrlTextBox;
+        private TextBox _secondaryUrlTextBox;
         private TextBox _usernameTextBox;
         private PasswordBox _passwordBox;
         private ToggleSwitch _compatibleModeToggle;
         private TextBlock _statusText;
+        private TextBlock _urlValidationMessage;
 
         public SettingsPage()
         {
             InitializeComponent();
 
             // Get control references
-            _serverUrlTextBox = FindName("ServerUrlTextBox") as TextBox;
+            _primaryUrlTextBox = FindName("PrimaryUrlTextBox") as TextBox;
+            _secondaryUrlTextBox = FindName("SecondaryUrlTextBox") as TextBox;
             _usernameTextBox = FindName("UsernameTextBox") as TextBox;
             _passwordBox = FindName("PasswordBox") as PasswordBox;
             _compatibleModeToggle = FindName("CompatibleModeToggle") as ToggleSwitch;
             _statusText = FindName("StatusText") as TextBlock;
+            _urlValidationMessage = FindName("UrlValidationMessage") as TextBlock;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -59,9 +63,23 @@ namespace Subsonic8.Phone.Views
             {
                 var settings = ApplicationData.Current.LocalSettings;
 
-                if (settings.Values.ContainsKey("BaseUrl") && _serverUrlTextBox != null)
+                if (settings.Values.ContainsKey("PrimaryUrl") && _primaryUrlTextBox != null)
                 {
-                    _serverUrlTextBox.Text = settings.Values["BaseUrl"] as string ?? string.Empty;
+                    _primaryUrlTextBox.Text = settings.Values["PrimaryUrl"] as string ?? string.Empty;
+                }
+
+                if (settings.Values.ContainsKey("SecondaryUrl") && _secondaryUrlTextBox != null)
+                {
+                    _secondaryUrlTextBox.Text = settings.Values["SecondaryUrl"] as string ?? string.Empty;
+                }
+
+                // Backwards compatibility: migrate old BaseUrl to PrimaryUrl
+                if (!settings.Values.ContainsKey("PrimaryUrl") && settings.Values.ContainsKey("BaseUrl"))
+                {
+                    if (_primaryUrlTextBox != null)
+                    {
+                        _primaryUrlTextBox.Text = settings.Values["BaseUrl"] as string ?? string.Empty;
+                    }
                 }
 
                 if (settings.Values.ContainsKey("Username") && _usernameTextBox != null)
@@ -85,19 +103,44 @@ namespace Subsonic8.Phone.Views
             }
         }
 
+        private bool ValidateUrls()
+        {
+            var primaryUrl = _primaryUrlTextBox?.Text.Trim() ?? string.Empty;
+            var secondaryUrl = _secondaryUrlTextBox?.Text.Trim() ?? string.Empty;
+
+            if (string.IsNullOrWhiteSpace(primaryUrl) && string.IsNullOrWhiteSpace(secondaryUrl))
+            {
+                if (_urlValidationMessage != null)
+                {
+                    _urlValidationMessage.Visibility = Visibility.Visible;
+                }
+                return false;
+            }
+
+            if (_urlValidationMessage != null)
+            {
+                _urlValidationMessage.Visibility = Visibility.Collapsed;
+            }
+            return true;
+        }
+
         private void SaveSettings()
         {
             var settings = ApplicationData.Current.LocalSettings;
-            if (_serverUrlTextBox != null) settings.Values["BaseUrl"] = _serverUrlTextBox.Text.Trim();
+            if (_primaryUrlTextBox != null) settings.Values["PrimaryUrl"] = _primaryUrlTextBox.Text.Trim();
+            if (_secondaryUrlTextBox != null) settings.Values["SecondaryUrl"] = _secondaryUrlTextBox.Text.Trim();
             if (_usernameTextBox != null) settings.Values["Username"] = _usernameTextBox.Text.Trim();
             if (_passwordBox != null) settings.Values["Password"] = _passwordBox.Password;
             if (_compatibleModeToggle != null) settings.Values["CompatibleMode"] = _compatibleModeToggle.IsOn;
         }
 
-
-
         private void OnSaveClick(object sender, RoutedEventArgs e)
         {
+            if (!ValidateUrls())
+            {
+                return;
+            }
+
             SaveSettings();
             if (_statusText != null) _statusText.Text = "Settings saved successfully!";
 
@@ -109,36 +152,50 @@ namespace Subsonic8.Phone.Views
 
         private async void OnTestConnectionClick(object sender, RoutedEventArgs e)
         {
+            if (!ValidateUrls())
+            {
+                return;
+            }
+
             if (_statusText != null) _statusText.Text = "Testing connection...";
 
-            var wp8Service = new Subsonic8.Phone.Services.WP8SubsonicService();
-            wp8Service.Configure(
-                _serverUrlTextBox?.Text.Trim() ?? string.Empty,
-                _usernameTextBox?.Text.Trim() ?? string.Empty,
-                _passwordBox?.Password ?? string.Empty
-            );
+            var primaryUrl = _primaryUrlTextBox?.Text.Trim() ?? string.Empty;
+            var secondaryUrl = _secondaryUrlTextBox?.Text.Trim() ?? string.Empty;
+            var username = _usernameTextBox?.Text.Trim() ?? string.Empty;
+            var password = _passwordBox?.Password ?? string.Empty;
 
             try
             {
-                var success = await wp8Service.PingAsync();
+                // Use route selection service to test both URLs
+                var networkService = new NetworkDetectionService();
+                var routeService = new RouteSelectionService(networkService);
 
-                if (success)
+                var result = await routeService.SelectBestRouteAsync(
+                    primaryUrl,
+                    secondaryUrl,
+                    username,
+                    password);
+
+                if (result.Success)
                 {
-                    if (_statusText != null) _statusText.Text = "✓ Connection successful!";
+                    if (_statusText != null)
+                    {
+                        _statusText.Text = "✓ Connection successful!\nSelected: " + result.SelectedUrl;
+                    }
                 }
                 else
                 {
-                    if (_statusText != null) _statusText.Text = "✗ Connection failed: Ping returned false";
+                    if (_statusText != null)
+                    {
+                        _statusText.Text = "✗ Connection failed: " + result.FailureReason;
+                    }
                 }
             }
             catch (Exception ex)
             {
                 if (_statusText != null) _statusText.Text = "✗ Error: " + ex.Message;
             }
-            finally
-            {
-                wp8Service.Dispose();
-            }
         }
     }
 }
+
